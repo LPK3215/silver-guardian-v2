@@ -5,11 +5,11 @@
  */
 import { ref, onMounted, onUnmounted } from 'vue'
 
-// 全局单例：同一时间只允许一条消息在朗读
-let currentSpeakingId = ref(null)
+// 全局共享状态：所有 useTTS 实例共用，确保跨组件状态同步
+const _isSpeaking = ref(false)
+const _currentSpeakingId = ref(null)
 
 export function useTTS() {
-  const isSpeaking = ref(false)
   const isSupported = ref(false)
   let currentUtterance = null
   let keepaliveTimer = null
@@ -29,7 +29,10 @@ export function useTTS() {
   })
 
   onUnmounted(() => {
-    stop()
+    // 仅当当前消息正在朗读时才停止，避免影响其他实例
+    if (_isSpeaking.value && _currentSpeakingId.value) {
+      stop()
+    }
   })
 
   /**
@@ -96,13 +99,14 @@ export function useTTS() {
     if (!isSupported.value) return
 
     // 如果正在朗读这条消息，点击则停止
-    if (isSpeaking.value && currentSpeakingId.value === messageKey) {
+    if (_isSpeaking.value && _currentSpeakingId.value === messageKey) {
       stop()
       return
     }
 
     // 停止其他正在朗读的
     window.speechSynthesis.cancel()
+    stopKeepalive()
 
     const plainText = markdownToPlainText(text)
     if (!plainText) return
@@ -123,20 +127,20 @@ export function useTTS() {
     }
 
     utterance.onstart = () => {
-      isSpeaking.value = true
-      currentSpeakingId.value = messageKey
+      _isSpeaking.value = true
+      _currentSpeakingId.value = messageKey
       startKeepalive()
     }
 
     utterance.onend = () => {
-      isSpeaking.value = false
-      currentSpeakingId.value = null
+      _isSpeaking.value = false
+      _currentSpeakingId.value = null
       stopKeepalive()
     }
 
     utterance.onerror = () => {
-      isSpeaking.value = false
-      currentSpeakingId.value = null
+      _isSpeaking.value = false
+      _currentSpeakingId.value = null
       stopKeepalive()
     }
 
@@ -151,8 +155,8 @@ export function useTTS() {
     if (!isSupported.value) return
     stopKeepalive()
     window.speechSynthesis.cancel()
-    isSpeaking.value = false
-    currentSpeakingId.value = null
+    _isSpeaking.value = false
+    _currentSpeakingId.value = null
     currentUtterance = null
   }
 
@@ -160,13 +164,13 @@ export function useTTS() {
    * 判断指定消息是否正在朗读
    */
   function isSpeakingMessage(messageKey) {
-    return isSpeaking.value && currentSpeakingId.value === messageKey
+    return _isSpeaking.value && _currentSpeakingId.value === messageKey
   }
 
   return {
-    isSpeaking,
+    isSpeaking: _isSpeaking,
     isSupported,
-    currentSpeakingId,
+    currentSpeakingId: _currentSpeakingId,
     speak,
     stop,
     isSpeakingMessage,

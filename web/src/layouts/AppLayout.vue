@@ -264,7 +264,7 @@ provide('settingsModal', {
 </script>
 
 <template>
-  <div class="app-layout" :class="{ 'sidebar-collapsed': sidebarCollapsed }">
+  <div class="app-layout agent-page" :class="{ 'sidebar-collapsed': sidebarCollapsed }">
     <div class="header">
       <div class="sidebar-brand" @click.stop>
         <router-link v-if="!sidebarCollapsed" to="/" class="brand-link">

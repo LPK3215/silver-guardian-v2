@@ -143,6 +143,18 @@
                 <h1>{{ randomGreeting }}</h1>
               </div>
 
+              <!-- 银发守护：快捷问题面板 - 只在无对话时显示 -->
+              <div v-if="!conversations.length" class="quick-questions-panel">
+                <button
+                  v-for="q in quickQuestions"
+                  :key="q"
+                  class="quick-question-btn"
+                  @click="askQuickQuestion(q)"
+                >
+                  {{ q }}
+                </button>
+              </div>
+
               <AgentInputArea
                 v-model="userInput"
                 :is-loading="isProcessing"
@@ -157,6 +169,17 @@
                 @remove-attachment="handleAttachmentRemove"
               >
                 <template #actions-left-extra>
+                  <!-- 银发守护：语音输入按钮 -->
+                  <button
+                    v-if="voiceInput.isSupported.value"
+                    class="voice-input-btn"
+                    :class="{ recording: voiceInput.isRecording.value }"
+                    :title="voiceInput.isRecording.value ? '正在录音，点击停止' : '语音输入'"
+                    @click.stop="toggleVoice"
+                  >
+                    <Mic v-if="!voiceInput.isRecording.value" :size="20" />
+                    <Square v-else :size="20" />
+                  </button>
                   <slot name="input-actions-left" :has-active-thread="!!currentChatId"></slot>
                 </template>
                 <template #actions-right-extra>
@@ -560,6 +583,16 @@
     />
 
     <ElderlyEmergencyButton />
+
+    <!-- 银发守护：适老化设置入口 -->
+    <button
+      class="elderly-settings-btn"
+      title="适老化设置"
+      @click="showElderlySettings = true"
+    >
+      <Settings :size="24" />
+    </button>
+    <ElderlySettingsModal v-model:open="showElderlySettings" />
   </div>
 </template>
 
@@ -576,8 +609,8 @@ import {
   onActivated,
   onDeactivated
 } from 'vue'
-import { message } from 'ant-design-vue'
-import { ChevronDown, FolderKanban, LayoutList, RefreshCw } from 'lucide-vue-next'
+import { message, Modal } from 'ant-design-vue'
+import { ChevronDown, FolderKanban, LayoutList, RefreshCw, Mic, Square, Settings } from 'lucide-vue-next'
 import { formatFileSize } from '@/utils/file_utils'
 import FileTypeIcon from '@/components/common/FileTypeIcon.vue'
 import { generatePixelAvatar } from '@/utils/pixelAvatar'
@@ -610,12 +643,14 @@ import { useAgentRunStream } from '@/composables/useAgentRunStream'
 import { useAgentStreamHandler } from '@/composables/useAgentStreamHandler'
 import { useStreamSmoother } from '@/composables/useStreamSmoother'
 import { useAgentMentionConfig } from '@/composables/useAgentMentionConfig'
+import { useVoiceInput } from '@/composables/useVoiceInput'
 import AgentArtifactsCard from '@/components/AgentArtifactsCard.vue'
 import AgentPanel from '@/components/AgentPanel.vue'
 import AttachmentTmpUploadModal from '@/components/AttachmentTmpUploadModal.vue'
 import SubagentThreadModal from '@/components/SubagentThreadModal.vue'
 import ElderlyEmergencyButton from '@/components/ElderlyEmergencyButton.vue'
-import { detectEmergency, generateEmergencyAlert } from '@/utils/emergencyDetector'
+import ElderlySettingsModal from '@/components/ElderlySettingsModal.vue'
+import { detectEmergency } from '@/utils/emergencyDetector'
 import FallbackAvatar from '@/components/common/FallbackAvatar.vue'
 import { enrichTaskToolCalls, parseToolCallArgs } from '@/components/ToolCallingResult/toolRegistry'
 import { getConversationDisplayItems } from '@/utils/messageGrouping'
@@ -640,6 +675,32 @@ const { threads, currentThreadId, currentThread } = storeToRefs(chatThreadsStore
 
 // ==================== LOCAL CHAT & UI STATE ====================
 const userInput = ref('')
+
+// === 银发守护：语音输入 ===
+const voiceInput = useVoiceInput((text) => {
+  // 语音识别结果追加到输入框
+  userInput.value = (userInput.value + text).trim()
+})
+function toggleVoice() {
+  voiceInput.toggleRecording()
+}
+
+// === 银发守护：快捷问题 ===
+const quickQuestions = [
+  '高血压患者饮食要注意什么？',
+  '高龄津贴怎么申请？',
+  '老人摔倒了怎么办？',
+  '最近总是睡不好，有什么建议？',
+  '如何预防老年人诈骗？',
+]
+function askQuickQuestion(q) {
+  userInput.value = q
+  handleSendOrStop({})
+}
+
+// === 银发守护：适老化设置弹窗 ===
+const showElderlySettings = ref(false)
+
 const sendCooldownActive = ref(false)
 let sendCooldownTimer = null
 // 预设的打招呼文本
@@ -2457,21 +2518,12 @@ const handleSendMessage = async ({ image } = {}) => {
   // === 银发守护：紧急关键词检测 ===
   const emergency = detectEmergency(text)
   if (emergency) {
-    const alertHtml = generateEmergencyAlert(emergency)
-    const threadState0 = getThreadState(currentChatId.value || 'emergency_preview')
-    if (threadState0) {
-      threadState0.conversations = threadState0.conversations || []
-      threadState0.conversations.push({
-        id: `emergency_${Date.now()}`,
-        status: 'finished',
-        messages: [{
-          type: 'ai',
-          content: alertHtml,
-          isHtml: true,
-          isEmergencyAlert: true
-        }]
-      })
-    }
+    Modal.warning({
+      title: `⚠️ 紧急安全提醒：${emergency.label}`,
+      content: emergency.advice + '\n\n如情况紧急，请点击右下角 SOS 按钮拨打120。',
+      okText: '我知道了',
+      width: 480,
+    })
     // 紧急情况仍允许继续发送，让 AI 也能给出建议
   }
 

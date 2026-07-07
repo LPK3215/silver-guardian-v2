@@ -53,4 +53,16 @@ BUILTIN_SKILLS: list[BuiltinSkillSpec] = [
         version="2026.06.05",
         mcp_dependencies=("mcp-server-chart",),
     ),
+    BuiltinSkillSpec(
+        slug="elderly-assessment",
+        source_dir=_SKILLS_ROOT / "elderly-assessment",
+        description="老年人综合评估：ADL日常生活能力、MMSE认知功能、跌倒风险、营养状况和情绪状态评估。",
+        version="2026.07.08",
+    ),
+    BuiltinSkillSpec(
+        slug="care-plan-generator",
+        source_dir=_SKILLS_ROOT / "care-plan-generator",
+        description="根据老人健康状况生成个性化护理计划，含日常安排、饮食方案、运动方案和用药管理。",
+        version="2026.07.08",
+    ),
 ]

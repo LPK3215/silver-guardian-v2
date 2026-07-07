@@ -237,6 +237,46 @@
   color: var(--gray-700);
 }
 
+/* ===== 语音朗读按钮 ===== */
+.tts-bar {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  padding-top: 4px;
+}
+
+.tts-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px !important;
+  font-size: 14px !important;
+  border-radius: 20px !important;
+  border: 1.5px solid var(--main-200, #ffd591) !important;
+  background: var(--main-5, #fffbeb) !important;
+  color: var(--main-700, #d46b08) !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 36px !important;
+}
+
+.tts-btn:hover {
+  background: var(--main-50, #fff7e6) !important;
+  border-color: var(--main-400, #ffc53d) !important;
+}
+
+.tts-btn--active {
+  background: #fff1f0 !important;
+  border-color: #ffccc7 !important;
+  color: #ff4d4f !important;
+  animation: tts-pulse 1.5s infinite;
+}
+
+@keyframes tts-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 77, 79, 0.3); }
+  50% { box-shadow: 0 0 0 6px rgba(255, 77, 79, 0); }
+}
+
 /* ===== 移动端 ===== */
 @media (max-width: 767px) {
   .agent-page {

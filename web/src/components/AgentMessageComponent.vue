@@ -61,6 +61,22 @@
         class="message-md"
       />
 
+      <!-- 银发守护：语音朗读按钮（仅AI消息且已完成时显示） -->
+      <div
+        v-if="tts.isSupported.value && parsedData.content && message.type === 'ai'"
+        class="tts-bar"
+      >
+        <button
+          class="tts-btn"
+          :class="{ 'tts-btn--active': tts.isSpeakingMessage(messageKey) }"
+          @click="handleTTS"
+        >
+          <Square v-if="tts.isSpeakingMessage(messageKey)" :size="16" />
+          <Volume2 v-else :size="16" />
+          <span>{{ tts.isSpeakingMessage(messageKey) ? '停止朗读' : '朗读' }}</span>
+        </button>
+      </div>
+
       <div v-else-if="parsedData.reasoning_content" class="empty-block"></div>
 
       <!-- 错误提示块 -->
@@ -150,7 +166,7 @@
 import { computed, ref, onUnmounted } from 'vue'
 import { CaretRightOutlined } from '@ant-design/icons-vue'
 import RefsComponent from '@/components/RefsComponent.vue'
-import { Copy, Check, X } from 'lucide-vue-next'
+import { Copy, Check, X, Volume2, Square } from 'lucide-vue-next'
 import ToolCallsGroupComponent from '@/components/ToolCallsGroupComponent.vue'
 import MarkdownPreview from '@/components/common/MarkdownPreview.vue'
 import MentionTextRenderer from '@/components/common/MentionTextRenderer.vue'
@@ -162,6 +178,7 @@ import { inferImageMimeTypeFromBase64, normalizeAttachmentPreviews } from '@/uti
 import { buildMentionDisplayLabels } from '@/utils/mention_utils'
 import FileTypeIcon from '@/components/common/FileTypeIcon.vue'
 import { enrichTaskToolCalls } from '@/components/ToolCallingResult/toolRegistry'
+import { useTTS } from '@/composables/useTTS'
 
 const props = defineProps({
   // 消息角色：'user'|'assistant'|'sent'|'received'
@@ -324,6 +341,30 @@ const parsedData = computed(() => {
     reasoning_content: reasoningContent
   }
 })
+
+// === 银发守护：语音朗读 ===
+const tts = useTTS()
+const messageKey = computed(() => props.message.id || `msg-${props.message.content?.slice(0, 20)}`)
+
+function handleTTS() {
+  if (!tts.isSupported.value) return
+  if (tts.isSpeakingMessage(messageKey.value)) {
+    tts.stop()
+  } else {
+    tts.speak(parsedData.value.content, messageKey.value)
+  }
+}
+
+// 自动朗读：当消息刚完成且设置开启了自动朗读
+const autoReadEnabled = localStorage.getItem('elderly_auto_read') === 'true'
+if (autoReadEnabled && props.message.type === 'ai' && props.message.status === 'finished' && props.isLatestMessage) {
+  // 延迟一点，等 DOM 更新完
+  setTimeout(() => {
+    if (parsedData.value.content && tts.isSupported.value) {
+      tts.speak(parsedData.value.content, messageKey.value)
+    }
+  }, 500)
+}
 </script>
 
 <style lang="less" scoped>

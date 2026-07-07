@@ -33,6 +33,19 @@
           </div>
         </a-form-item>
 
+        <!-- 自动朗读 -->
+        <a-form-item label="自动朗读回复">
+          <a-switch
+            v-model:checked="autoRead"
+            size="large"
+            checked-children="开"
+            un-checked-children="关"
+          />
+          <div class="font-size-preview">
+            开启后，AI 每次回复完成会自动语音朗读，方便老人“听”回复
+          </div>
+        </a-form-item>
+
         <!-- 保存按钮 -->
         <div style="display: flex; gap: 12px; margin-top: 24px;">
           <a-button type="primary" size="large" style="flex: 1; min-height: 48px;" @click="handleSave">
@@ -63,6 +76,7 @@ const visible = computed({
 
 const emergencyContact = ref('')
 const fontSizePref = ref('large')
+const autoRead = ref(false)
 
 // 初始化：从 localStorage 读取
 const savedContact = localStorage.getItem('elderly_emergency_contact')
@@ -70,6 +84,9 @@ if (savedContact) emergencyContact.value = savedContact
 
 const savedFont = localStorage.getItem('elderly_font_size')
 if (savedFont) fontSizePref.value = savedFont
+
+const savedAutoRead = localStorage.getItem('elderly_auto_read')
+if (savedAutoRead === 'true') autoRead.value = true
 
 const previewStyle = computed(() => {
   const sizes = { normal: '14px', large: '18px', xlarge: '22px' }
@@ -83,6 +100,9 @@ function handleSave() {
   // 保存字号偏好
   localStorage.setItem('elderly_font_size', fontSizePref.value)
   applyFontSize(fontSizePref.value)
+
+  // 保存自动朗读设置
+  localStorage.setItem('elderly_auto_read', autoRead.value ? 'true' : 'false')
 
   // 通知紧急按钮组件更新
   window.dispatchEvent(new Event('elderly-contact-updated'))

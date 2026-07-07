@@ -1,0 +1,257 @@
+/*
+ * 银发守护 - 适老化界面样式
+ * 通过增大字号、提高对比度、增大点击区域等方式优化老年用户体验
+ * 在 main.js 中引入此文件即可全局生效
+ */
+
+/* ===== 适老化根变量 ===== */
+:root {
+  /* 增大基础字号 */
+  --elderly-font-size-base: 18px;
+  --elderly-font-size-lg: 20px;
+  --elderly-font-size-xl: 24px;
+  --elderly-font-size-sm: 16px;
+  --elderly-font-size-xs: 14px;
+
+  /* 增大圆角，视觉更柔和 */
+  --elderly-border-radius: 12px;
+
+  /* 增大间距 */
+  --elderly-spacing: 16px;
+
+  /* 紧急按钮颜色 */
+  --elderly-emergency-color: #ff4d4f;
+  --elderly-emergency-bg: #fff2f0;
+}
+
+/* ===== 全局字号放大 ===== */
+html {
+  font-size: var(--elderly-font-size-base);
+}
+
+body {
+  font-size: var(--elderly-font-size-base) !important;
+  line-height: 1.8 !important;
+}
+
+/* 对话消息字体放大 */
+.agent-chat-message,
+.chat-message-content,
+.message-content,
+.prose {
+  font-size: var(--elderly-font-size-base) !important;
+  line-height: 1.8 !important;
+}
+
+/* 标题字号 */
+h1 { font-size: var(--elderly-font-size-xl) !important; }
+h2 { font-size: var(--elderly-font-size-lg) !important; }
+h3 { font-size: var(--elderly-font-size-base) !important; }
+
+/* ===== 增大点击区域 ===== */
+button,
+.ant-btn,
+.ant-btn-sm,
+.ant-btn-lg {
+  min-height: 44px !important;
+  font-size: var(--elderly-font-size-sm) !important;
+  border-radius: var(--elderly-border-radius) !important;
+}
+
+/* 输入框放大 */
+input,
+textarea,
+.ant-input,
+.ant-input-affix-wrapper,
+.ant-select-selector {
+  font-size: var(--elderly-font-size-base) !important;
+  min-height: 44px !important;
+}
+
+/* ===== 对话输入框特别处理 ===== */
+.agent-chat-input,
+.chat-input textarea {
+  font-size: var(--elderly-font-size-base) !important;
+  min-height: 56px !important;
+  border-radius: var(--elderly-border-radius) !important;
+}
+
+/* ===== 侧边栏导航放大 ===== */
+.agent-sidebar-item,
+.sidebar-item {
+  font-size: var(--elderly-font-size-sm) !important;
+  min-height: 48px !important;
+  padding: 12px 16px !important;
+}
+
+/* ===== 智能体选择卡片放大 ===== */
+.agent-card,
+.agent-select-item {
+  font-size: var(--elderly-font-size-sm) !important;
+  padding: 12px !important;
+  border-radius: var(--elderly-border-radius) !important;
+}
+
+/* ===== 提高对比度 ===== */
+.agent-chat-message,
+.chat-message-content {
+  color: #1a1a1a !important;
+}
+
+/* 链接颜色加深 */
+a {
+  color: var(--main-800) !important;
+}
+
+/* ===== 紧急求助按钮 ===== */
+.elderly-emergency-button {
+  position: fixed;
+  bottom: 80px;
+  right: 24px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50% !important;
+  background: var(--elderly-emergency-color) !important;
+  color: white !important;
+  font-size: 14px !important;
+  font-weight: bold !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(255, 77, 79, 0.4) !important;
+  cursor: pointer;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  line-height: 1.2;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-height: 64px !important;
+}
+
+.elderly-emergency-button:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(255, 77, 79, 0.5) !important;
+}
+
+.elderly-emergency-button:active {
+  transform: scale(0.95);
+}
+
+.elderly-emergency-icon {
+  font-size: 24px !important;
+  margin-bottom: 2px;
+}
+
+/* ===== 紧急求助弹窗 ===== */
+.elderly-emergency-modal {
+  border-radius: 16px !important;
+}
+
+.elderly-emergency-modal .ant-modal-content {
+  border-radius: 16px !important;
+  padding: 24px !important;
+}
+
+.elderly-emergency-modal .ant-modal-header {
+  border-radius: 16px 16px 0 0 !important;
+}
+
+.elderly-emergency-modal h2 {
+  color: var(--elderly-emergency-color) !important;
+  font-size: 24px !important;
+}
+
+.elderly-emergency-phone {
+  font-size: 32px !important;
+  font-weight: bold !important;
+  color: var(--elderly-emergency-color) !important;
+  text-align: center;
+  padding: 16px 0;
+  letter-spacing: 2px;
+}
+
+.elderly-emergency-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.elderly-emergency-actions button {
+  flex: 1;
+  min-height: 52px !important;
+  font-size: 18px !important;
+  border-radius: var(--elderly-border-radius) !important;
+}
+
+/* ===== 紧急关键词检测提示 ===== */
+.elderly-emergency-alert {
+  background: var(--elderly-emergency-bg) !important;
+  border: 2px solid var(--elderly-emergency-color) !important;
+  border-radius: var(--elderly-border-radius) !important;
+  padding: 16px !important;
+  margin: 12px 0 !important;
+  font-size: var(--elderly-font-size-base) !important;
+  color: var(--elderly-emergency-color) !important;
+  font-weight: 500 !important;
+}
+
+.elderly-emergency-alert-title {
+  font-size: var(--elderly-font-size-lg) !important;
+  font-weight: bold !important;
+  margin-bottom: 8px !important;
+}
+
+/* ===== 减少视觉杂乱 ===== */
+/* 隐藏不必要的装饰元素 */
+.agent-header-decorate,
+.chat-decoration {
+  display: none !important;
+}
+
+/* 简化阴影 */
+.ant-card,
+.ant-popover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* ===== 放大滚动条 ===== */
+::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gray-300) !important;
+  border-radius: 4px !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-400) !important;
+}
+
+/* ===== 放大分页和标签 ===== */
+.ant-pagination-item,
+.ant-tag {
+  font-size: var(--elderly-font-size-sm) !important;
+  min-height: 36px !important;
+  line-height: 36px !important;
+}
+
+.ant-pagination-item a {
+  font-size: var(--elderly-font-size-sm) !important;
+}
+
+/* ===== 移动端适配 ===== */
+@media (max-width: 767px) {
+  :root {
+    --elderly-font-size-base: 16px;
+    --elderly-font-size-sm: 15px;
+  }
+
+  .elderly-emergency-button {
+    width: 56px;
+    height: 56px;
+    bottom: 70px;
+    right: 16px;
+  }
+}

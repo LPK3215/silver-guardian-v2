@@ -558,6 +558,8 @@
       :ongoing-messages="activeSubagentThreadOngoingMessages"
       :is-streaming="activeSubagentThreadIsStreaming"
     />
+
+    <ElderlyEmergencyButton />
   </div>
 </template>
 
@@ -612,6 +614,8 @@ import AgentArtifactsCard from '@/components/AgentArtifactsCard.vue'
 import AgentPanel from '@/components/AgentPanel.vue'
 import AttachmentTmpUploadModal from '@/components/AttachmentTmpUploadModal.vue'
 import SubagentThreadModal from '@/components/SubagentThreadModal.vue'
+import ElderlyEmergencyButton from '@/components/ElderlyEmergencyButton.vue'
+import { detectEmergency, generateEmergencyAlert } from '@/utils/emergencyDetector'
 import FallbackAvatar from '@/components/common/FallbackAvatar.vue'
 import { enrichTaskToolCalls, parseToolCallArgs } from '@/components/ToolCallingResult/toolRegistry'
 import { getConversationDisplayItems } from '@/utils/messageGrouping'
@@ -2449,6 +2453,27 @@ const handleSendMessage = async ({ image } = {}) => {
 
   // 发送后进入短暂冷却，防止连续触发停止
   startSendCooldown()
+
+  // === 银发守护：紧急关键词检测 ===
+  const emergency = detectEmergency(text)
+  if (emergency) {
+    const alertHtml = generateEmergencyAlert(emergency)
+    const threadState0 = getThreadState(currentChatId.value || 'emergency_preview')
+    if (threadState0) {
+      threadState0.conversations = threadState0.conversations || []
+      threadState0.conversations.push({
+        id: `emergency_${Date.now()}`,
+        status: 'finished',
+        messages: [{
+          type: 'ai',
+          content: alertHtml,
+          isHtml: true,
+          isEmergencyAlert: true
+        }]
+      })
+    }
+    // 紧急情况仍允许继续发送，让 AI 也能给出建议
+  }
 
   let threadId = currentChatId.value
   if (!threadId) {

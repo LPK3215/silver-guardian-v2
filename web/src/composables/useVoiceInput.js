@@ -11,6 +11,7 @@ export function useVoiceInput(onResult) {
   let recognition = null
 
   onMounted(() => {
+    if (typeof window === 'undefined') return
     const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition
     if (SpeechRecognition) {
@@ -19,6 +20,10 @@ export function useVoiceInput(onResult) {
       recognition.lang = 'zh-CN'
       recognition.continuous = true
       recognition.interimResults = true
+
+      recognition.onstart = () => {
+        isRecording.value = true
+      }
 
       recognition.onresult = (event) => {
         let finalText = ''
@@ -32,7 +37,7 @@ export function useVoiceInput(onResult) {
           }
         }
         interimText.value = interim
-        if (finalText && onResult) {
+        if (finalText && typeof onResult === 'function') {
           onResult(finalText)
         }
       }
@@ -52,10 +57,16 @@ export function useVoiceInput(onResult) {
   onUnmounted(() => {
     if (recognition) {
       try {
+        // 清理事件监听，防止内存泄漏
+        recognition.onstart = null
+        recognition.onresult = null
+        recognition.onerror = null
+        recognition.onend = null
         recognition.stop()
       } catch (e) {
         // ignore
       }
+      recognition = null
     }
   })
 
@@ -67,9 +78,10 @@ export function useVoiceInput(onResult) {
     } else {
       try {
         recognition.start()
-        isRecording.value = true
+        // isRecording 由 onstart 回调设置，避免 start 失败时状态不一致
       } catch (e) {
         console.warn('启动语音识别失败:', e)
+        isRecording.value = false
       }
     }
   }

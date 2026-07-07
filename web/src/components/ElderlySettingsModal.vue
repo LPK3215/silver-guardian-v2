@@ -61,7 +61,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
 
 const props = defineProps({
@@ -126,8 +126,10 @@ function applyFontSize(pref) {
   }
 }
 
-// 页面加载时应用已保存的字号
-applyFontSize(fontSizePref.value)
+// 页面加载时应用已保存的字号（放在 onMounted 中执行，避免 setup 阶段操作 DOM）
+onMounted(() => {
+  applyFontSize(fontSizePref.value)
+})
 </script>
 
 <style scoped>

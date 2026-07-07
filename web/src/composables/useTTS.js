@@ -12,14 +12,45 @@ export function useTTS() {
   const isSpeaking = ref(false)
   const isSupported = ref(false)
   let currentUtterance = null
+  let keepaliveTimer = null
+  let cachedVoices = []
 
   onMounted(() => {
-    isSupported.value = typeof window !== 'undefined' && 'speechSynthesis' in window
+    if (typeof window === 'undefined') return
+    isSupported.value = 'speechSynthesis' in window
+    if (!isSupported.value) return
+
+    // 语音列表是异步加载的，监听加载完成
+    const loadVoices = () => {
+      cachedVoices = window.speechSynthesis.getVoices() || []
+    }
+    loadVoices()
+    window.speechSynthesis.addEventListener('voiceschanged', loadVoices)
   })
 
   onUnmounted(() => {
     stop()
   })
+
+  /**
+   * Chrome 已知 bug：长文本朗读约15秒后会自动暂停
+   * 解决方案：朗读期间每10秒调用 resume() 保持活跃
+   */
+  function startKeepalive() {
+    stopKeepalive()
+    keepaliveTimer = setInterval(() => {
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.resume()
+      }
+    }, 10000)
+  }
+
+  function stopKeepalive() {
+    if (keepaliveTimer) {
+      clearInterval(keepaliveTimer)
+      keepaliveTimer = null
+    }
+  }
 
   /**
    * 将 Markdown 转为纯文本（去掉格式符号，保留可读内容）
@@ -82,8 +113,10 @@ export function useTTS() {
     utterance.pitch = 1
     utterance.volume = 1
 
-    // 尝试选择中文语音
-    const voices = window.speechSynthesis.getVoices()
+    // 尝试选择中文语音（使用缓存或实时获取）
+    const voices = cachedVoices.length > 0
+      ? cachedVoices
+      : (window.speechSynthesis.getVoices() || [])
     const zhVoice = voices.find(v => v.lang.startsWith('zh'))
     if (zhVoice) {
       utterance.voice = zhVoice
@@ -92,16 +125,19 @@ export function useTTS() {
     utterance.onstart = () => {
       isSpeaking.value = true
       currentSpeakingId.value = messageKey
+      startKeepalive()
     }
 
     utterance.onend = () => {
       isSpeaking.value = false
       currentSpeakingId.value = null
+      stopKeepalive()
     }
 
     utterance.onerror = () => {
       isSpeaking.value = false
       currentSpeakingId.value = null
+      stopKeepalive()
     }
 
     currentUtterance = utterance
@@ -113,6 +149,7 @@ export function useTTS() {
    */
   function stop() {
     if (!isSupported.value) return
+    stopKeepalive()
     window.speechSynthesis.cancel()
     isSpeaking.value = false
     currentSpeakingId.value = null

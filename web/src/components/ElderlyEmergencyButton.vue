@@ -52,26 +52,34 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 const showModal = ref(false)
 const emergencyContact = ref('')
+
+// 保存引用以便 onUnmounted 中移除
+function handleStorageChange(e) {
+  if (e.key === 'elderly_emergency_contact') {
+    emergencyContact.value = e.newValue || ''
+  }
+}
+
+function handleContactUpdated() {
+  emergencyContact.value = localStorage.getItem('elderly_emergency_contact') || ''
+}
 
 onMounted(() => {
   const contact = localStorage.getItem('elderly_emergency_contact')
   if (contact) {
     emergencyContact.value = contact
   }
-  // 监听 localStorage 变化（设置页面修改后实时更新）
-  window.addEventListener('storage', (e) => {
-    if (e.key === 'elderly_emergency_contact') {
-      emergencyContact.value = e.newValue || ''
-    }
-  })
-  // 同窗口内也能响应
-  window.addEventListener('elderly-contact-updated', () => {
-    emergencyContact.value = localStorage.getItem('elderly_emergency_contact') || ''
-  })
+  window.addEventListener('storage', handleStorageChange)
+  window.addEventListener('elderly-contact-updated', handleContactUpdated)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('storage', handleStorageChange)
+  window.removeEventListener('elderly-contact-updated', handleContactUpdated)
 })
 
 function callNumber(number) {

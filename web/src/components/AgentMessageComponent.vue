@@ -163,7 +163,7 @@
 </template>
 
 <script setup>
-import { computed, ref, onUnmounted } from 'vue'
+import { computed, ref, onMounted, onUnmounted, watch } from 'vue'
 import { CaretRightOutlined } from '@ant-design/icons-vue'
 import RefsComponent from '@/components/RefsComponent.vue'
 import { Copy, Check, X, Volume2, Square } from 'lucide-vue-next'
@@ -355,16 +355,35 @@ function handleTTS() {
   }
 }
 
-// 自动朗读：当消息刚完成且设置开启了自动朗读
-const autoReadEnabled = localStorage.getItem('elderly_auto_read') === 'true'
-if (autoReadEnabled && props.message.type === 'ai' && props.message.status === 'finished' && props.isLatestMessage) {
-  // 延迟一点，等 DOM 更新完
-  setTimeout(() => {
-    if (parsedData.value.content && tts.isSupported.value) {
-      tts.speak(parsedData.value.content, messageKey.value)
+// 自动朗读：仅在消息从「生成中」变为「完成」时触发，不朗读历史消息
+let hasAutoRead = false
+watch(
+  () => props.message.status,
+  (newStatus, oldStatus) => {
+    if (
+      !hasAutoRead &&
+      oldStatus && oldStatus !== 'finished' &&
+      newStatus === 'finished' &&
+      props.message.type === 'ai' &&
+      props.isLatestMessage &&
+      localStorage.getItem('elderly_auto_read') === 'true' &&
+      tts.isSupported.value &&
+      parsedData.value.content
+    ) {
+      hasAutoRead = true
+      setTimeout(() => {
+        tts.speak(parsedData.value.content, messageKey.value)
+      }, 300)
     }
-  }, 500)
-}
+  }
+)
+
+onUnmounted(() => {
+  // 组件销毁时停止此消息的朗读
+  if (tts.isSpeakingMessage(messageKey.value)) {
+    tts.stop()
+  }
+})
 </script>
 
 <style lang="less" scoped>

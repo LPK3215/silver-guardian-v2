@@ -7,7 +7,7 @@
 
 
 ::: tip 提示
-除了此文档网站外，你还可以访问 [Zread](https://zread.ai/xerrors/Yuxi) 或 [DeepWiki](https://deepwiki.com/xerrors/Yuxi) 查看自动生成的详细项目文档。
+除了此文档网站外，你还可以访问 [Zread](https://zread.ai/LPK3215/silver-guardian-v2) 或 [DeepWiki](https://deepwiki.com/LPK3215/silver-guardian-v2) 查看自动生成的详细项目文档。
 :::
 
 ## 环境要求
@@ -20,7 +20,7 @@
 
 ```bash
 # 克隆最新版本
-git clone --branch v0.7.1.beta1 --depth 1 https://github.com/xerrors/Yuxi.git
+git clone --branch v0.7.1.beta1 --depth 1 https://github.com/LPK3215/silver-guardian-v2.git
 cd Yuxi
 ```
 

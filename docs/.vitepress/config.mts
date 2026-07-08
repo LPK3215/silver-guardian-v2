@@ -7,7 +7,7 @@ export default defineConfig({
   lang: 'zh-CN',
   title: "Yuxi",
   description: "语析",
-  base: '/Yuxi/',
+  base: '/silver-guardian-v2/',
   ignoreDeadLinks: [
     /localhost/,
     /CONTRIBUTING$/,

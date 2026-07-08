@@ -112,7 +112,6 @@ const loadAllStats = async () => {
       agents: response.agents
     }
 
-    console.log('Dashboard 数据加载完成:', response)
     message.success('数据加载成功')
   } catch (error) {
     console.error('加载统计数据失败:', error)

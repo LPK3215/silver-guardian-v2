@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue'
 import { withBase } from 'vitepress'
 
-const GITHUB = 'https://github.com/xerrors/Yuxi'
+const GITHUB = 'https://github.com/LPK3215/silver-guardian-v2'
 const DEMO = 'https://www.bilibili.com/video/BV1TZEx6NEit/'
 
 // 关键数字（占位，后续替换为真实数据）
@@ -453,7 +453,7 @@ const vReveal = {
         </header>
         <div v-reveal class="yx-quick">
           <pre class="yx-code"><code><span class="yx-c-cmt"># 1. 克隆并初始化</span>
-git clone --branch v0.7.1.beta1 --depth 1 https://github.com/xerrors/Yuxi.git
+git clone --branch v0.7.1.beta1 --depth 1 https://github.com/LPK3215/silver-guardian-v2.git
 cd Yuxi && ./scripts/init.sh
 
 <span class="yx-c-cmt"># 2. 使用 Docker 启动</span>
@@ -474,7 +474,7 @@ open http://localhost:5173</code></pre>
           <h2 class="yx-head__title">由开源社区共同构建</h2>
         </header>
         <a v-reveal :href="GITHUB + '/graphs/contributors'" target="_blank" rel="noreferrer" class="yx-contrib">
-          <img src="https://contrib.rocks/image?repo=xerrors/Yuxi&max=60&columns=12" alt="Yuxi 贡献者头像墙" loading="lazy" />
+          <img src="https://contrib.rocks/image?repo=LPK3215/silver-guardian-v2&max=60&columns=12" alt="Yuxi 贡献者头像墙" loading="lazy" />
         </a>
         <p v-reveal class="yx-credits">
           站在巨人的肩上 ——

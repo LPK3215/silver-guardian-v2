@@ -120,24 +120,32 @@ cp .env.template .env
 
 **附开发关键步骤截图（不少于 3 张）：**
 
-| 截图 | 说明 |
-|---|---|
-| 【截图占位符】截图 1：TRAE IDE 开发界面（展示 `useTTS.js` 语音朗读代码生成） | 请从 TRAE IDE 对话历史中截取 |
-| 【截图占位符】截图 2：TRAE IDE 开发界面（展示 `emergencyDetector.js` 急症检测代码生成） | 请从 TRAE IDE 对话历史中截取 |
-| 【截图占位符】截图 3：用户端适老化对话界面（展示语音按钮 + 朗读按钮 + 大字号） | 运行项目后截图 |
-| 【截图占位符】截图 4：SOS 紧急求助弹窗 或 急症检测提醒弹窗 | 输入"胸口疼"后截图 |
+截图 1：Docker 全量启动 — 前端/后端/Worker/PostgreSQL/Redis/Milvus 全部在容器中运行
+![截图1](screenshot_01.png)
+
+截图 2：后端启动修复 — `.env` 中的 `localhost:5432` 在容器内指向容器自己，改为 Docker 服务名
+![截图2](screenshot_02.png)
+
+截图 3：本地 vs Docker 方案讨论 — AI 给出方案 A（全 Docker）和方案 B（本地开发优先）
+![截图3](screenshot_03.png)
+
+截图 4：本地开发模式启动成功 — 前端 pnpm dev + 后端 .venv + 本地 PostgreSQL + Docker 中间件
+![截图4](screenshot_04.png)
+
+截图 5：登录卡顿与对话报错排查 — Redis 端口未映射导致模型缓存为空，修复后恢复正常
+![截图5](screenshot_05.png)
 
 **附关键任务对话的 Session ID（不少于 3 个）：**
 
 | Session | 说明 |
 |---|---|
-| 【Session ID 占位符】Session 1：适老化语音交互功能开发（TTS + STT） | 请从 TRAE IDE 双击对话复制 |
-| 【Session ID 占位符】Session 2：紧急安全机制开发（急症检测 + SOS 按钮） | 请从 TRAE IDE 双击对话复制 |
-| 【Session ID 占位符】Session 3：适老化 UI 改造（大字号 + 设置面板 + CSS） | 请从 TRAE IDE 双击对话复制 |
-| 【Session ID 占位符】Session 4：养老专属 Skills 开发（老年评估 + 护理计划） | 请从 TRAE IDE 双击对话复制 |
+| `1778324314794521:d051d6b043cb59c31474a7044a43e98b_6a4df1d13e133d9755b7c146.6a4e09dc3e133d9755b7c68e.6a4e09dc3e133d9755b7c68c:TRAE Work CN.0.1.30` | 本地开发环境搭建：前端/后端本地运行，PostgreSQL 用本地服务，Redis/MinIO/Sandbox 用 Docker，拆分生产与开发两套 docker-compose |
+| `1778324314794521:a35d4e0d9b8c5808f89a8245dde274c7_6a4df1d13e133d9755b7c146.6a4e1ae33e133d9755b7c728.6a4e1ae23e133d9755b7c726:TRAE Work CN.0.1.30` | 登录卡顿与对话报错排查：定位登录慢和点击对话报错的根因，确认是否因服务长时间闲置关闭 |
+| `1778324314794521:06e4d3a8d0c0a63ec3c69e770e119a68_6a4df1d13e133d9755b7c146.6a4e06fa3e133d9755b7c5b8.6a4e06fa3e133d9755b7c5b6:TRAE Work CN.0.1.30` | 日志查看与问题定位 |
+| `1778324314794521:9572a3d2de685d212c18953583ba67da_6a4df1d13e133d9755b7c146.6a4e04c53e133d9755b7c47e.6a4e04c53e133d9755b7c47c:TRAE Work CN.0.1.30` | 前端 UI/UX 优化：使用技能审查页面，从专业角度提出美观性和交互舒适度改进建议 |
 
 ---
 
 ## 5. 对应的报名审核通过的帖子链接
 
-【报名帖链接占位符】（报名审核通过后，将报名帖 URL 粘贴至此）
+[https://forum.trae.cn/t/topic/84429](https://forum.trae.cn/t/topic/84429)

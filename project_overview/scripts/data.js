@@ -9,11 +9,6 @@ const PROJECT_DATA = {
     tagline: "用 AI 守护每一位长者的晚年生活",
     version: "0.7.1.beta1",
     license: "MIT",
-    author: "LPK3215",
-    email: "17538703215@163.com",
-    repo: "https://github.com/LPK3215/silver-guardian-v2",
-    platform: "Yuxi",
-    description: "面向养老场景的 AI 对话与知识库问答系统，融合 RAG 技术与知识图谱，针对老年用户进行适老化改造。"
   },
 
   stats: [

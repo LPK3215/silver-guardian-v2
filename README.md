@@ -6,7 +6,7 @@
 [![Docker Compose](https://img.shields.io/badge/Docker-Compose-2496ED.svg)](https://docs.docker.com/compose/)
 [![Version](https://img.shields.io/badge/Version-0.7.1.beta1-purple.svg)](docs/develop-guides/changelog.md)
 
-> 面向养老场景的 AI 对话与知识库问答系统，基于 [Yuxi](https://github.com/LPK3215/silver-guardian-v2) 平台构建。
+> 面向养老场景的 AI 对话与知识库问答系统，融合 RAG 技术与知识图谱，针对老年用户进行适老化改造。
 
 ## 项目概述
 
@@ -257,4 +257,4 @@ Copyright (c) 2025-present LPK3215 and contributors.
 
 ## 致谢
 
-本项目基于 [Yuxi](https://github.com/LPK3215/silver-guardian-v2) 智能知识库与知识图谱平台构建，感谢所有贡献者。
+感谢 [Yuxi](https://github.com/LPK3215/silver-guardian-v2) 开源社区提供的底层框架支持。

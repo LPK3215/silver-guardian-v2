@@ -268,7 +268,7 @@ provide('settingsModal', {
     <div class="header">
       <div class="sidebar-brand" @click.stop>
         <router-link v-if="!sidebarCollapsed" to="/" class="brand-link">
-          <img :src="infoStore.organization.avatar" class="brand-avatar" />
+          <img :src="infoStore.organization.logo" class="brand-avatar" />
           <span class="brand-name">{{ organizationName }}</span>
         </router-link>
         <button
@@ -278,7 +278,7 @@ provide('settingsModal', {
           aria-label="展开侧边栏"
           @click="setSidebarCollapsed(false)"
         >
-          <img :src="infoStore.organization.avatar" class="brand-avatar brand-avatar-image" />
+          <img :src="infoStore.organization.logo" class="brand-avatar brand-avatar-image" />
           <PanelLeftOpen class="brand-expand-icon" size="20" />
         </button>
         <button
@@ -366,7 +366,7 @@ provide('settingsModal', {
         <div class="github nav-item" @click.stop v-if="false">
           <a-tooltip placement="right" :open="sidebarCollapsed ? undefined : false">
             <template #title>欢迎 Star</template>
-            <a href="https://github.com/xerrors/Yuxi" target="_blank" class="github-link">
+            <a href="https://github.com/LPK3215/silver-guardian-v2" target="_blank" class="github-link">
               <GithubOutlined class="icon" />
               <span class="nav-text">GitHub</span>
               <span v-if="githubStars > 0" class="github-stars">

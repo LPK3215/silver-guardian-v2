@@ -134,6 +134,78 @@
   --color-trans-dark: rgba(255, 255, 255, 0.85);
 }
 
+/* ===== 暗色模式下的多色方案覆盖 ===== */
+/* 暗色模式下色阶反转：深色变浅、浅色变深，保持与琥珀暗色相同的反转逻辑 */
+
+:root.dark[data-color-scheme="blue"] {
+  --main-1000: #e6f7ff;
+  --main-900: #bae7ff;
+  --main-800: #91d5ff;
+  --main-700: #69c0ff;
+  --main-600: #40a9ff;
+  --main-500: #1890ff;
+  --main-400: #096dd9;
+  --main-300: #0050b3;
+  --main-200: #003a8c;
+  --main-100: #00255c;
+  --main-50: #001540;
+  --main-40: #000f33;
+  --main-30: #000a1f;
+  --main-20: #000819;
+  --main-10: #00050f;
+  --main-5: #000308;
+  --main-1: #000205;
+  --main-0: #000000;
+  --main-color: #1890ff;
+  --main-bright: #40a9ff;
+}
+
+:root.dark[data-color-scheme="green"] {
+  --main-1000: #e8f5e9;
+  --main-900: #c8e6c9;
+  --main-800: #a5d6a7;
+  --main-700: #81c784;
+  --main-600: #66bb6a;
+  --main-500: #4caf50;
+  --main-400: #43a047;
+  --main-300: #388e3c;
+  --main-200: #2e7d32;
+  --main-100: #1b5e20;
+  --main-50: #144521;
+  --main-40: #0f3318;
+  --main-30: #0a220f;
+  --main-20: #081b0c;
+  --main-10: #051008;
+  --main-5: #030a05;
+  --main-1: #020503;
+  --main-0: #000000;
+  --main-color: #4caf50;
+  --main-bright: #66bb6a;
+}
+
+:root.dark[data-color-scheme="teal"] {
+  --main-1000: #e0f2f1;
+  --main-900: #b2dfdb;
+  --main-800: #80cbc4;
+  --main-700: #4db6ac;
+  --main-600: #26a69a;
+  --main-500: #009688;
+  --main-400: #00897b;
+  --main-300: #00796b;
+  --main-200: #00695c;
+  --main-100: #004d40;
+  --main-50: #002d27;
+  --main-40: #00221e;
+  --main-30: #001a17;
+  --main-20: #001411;
+  --main-10: #000d0a;
+  --main-5: #000806;
+  --main-1: #000403;
+  --main-0: #000000;
+  --main-color: #009688;
+  --main-bright: #26a69a;
+}
+
 :root.dark .markmap {
   --markmap-max-width: 9999px;
   --markmap-a-color: var(--main-500);

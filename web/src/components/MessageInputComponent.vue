@@ -1525,8 +1525,9 @@ defineExpose({
 }
 
 .send-button.ant-btn-icon-only {
-  height: 32px;
+  height: 32px !important;
   width: 32px;
+  min-height: 32px !important;
   cursor: pointer;
   background-color: var(--main-500);
   border-radius: 50%;

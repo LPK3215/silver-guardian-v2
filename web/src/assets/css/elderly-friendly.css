@@ -4,16 +4,16 @@
  * 通过 .agent-page scope 限定
  */
 
-/* ===== 对话页面字号放大 ===== */
+/* ===== 对话页面字号放大（通过 CSS 变量支持动态调节）===== */
 .agent-page {
-  font-size: 18px;
+  font-size: var(--elderly-font-size, 18px);
   line-height: 1.8;
 }
 
 .agent-page .message-md,
 .agent-page .message-text,
 .agent-page .prose {
-  font-size: 18px !important;
+  font-size: var(--elderly-font-size, 18px) !important;
   line-height: 1.8 !important;
 }
 
@@ -34,14 +34,14 @@
 .agent-page .ant-input,
 .agent-page .ant-input-affix-wrapper,
 .agent-page .ant-select-selector {
-  font-size: 18px !important;
+  font-size: var(--elderly-font-size, 18px) !important;
   min-height: 44px !important;
 }
 
 /* ===== 对话输入框 ===== */
 .agent-page .agent-chat-input,
 .agent-page .chat-input textarea {
-  font-size: 18px !important;
+  font-size: var(--elderly-font-size, 18px) !important;
   min-height: 56px !important;
   border-radius: 12px !important;
 }
@@ -62,9 +62,19 @@
   border-radius: 12px !important;
 }
 
-/* ===== 提高对比度 ===== */
+/* ===== 提高对比度（浅色模式）===== */
 .agent-page .message-text {
-  color: #1a1a1a !important;
+  color: var(--gray-1000) !important;
+}
+
+/* ===== 暗色模式适配 ===== */
+.dark .agent-page .message-text {
+  color: var(--gray-50) !important;
+}
+
+.dark .agent-page .message-md,
+.dark .agent-page .prose {
+  color: var(--gray-50);
 }
 
 .agent-page a {
@@ -131,7 +141,7 @@
 
 /* ===== 适老化设置按钮 ===== */
 .elderly-settings-btn {
-  position: fixed;
+  position: fixed !important;
   bottom: 80px;
   right: 100px;
   width: 48px;

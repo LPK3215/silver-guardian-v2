@@ -5,7 +5,7 @@
     :disabled="props.disabled"
     @open-change="handleOpenChange"
   >
-    <div class="model-select" :class="modelSelectClasses" @click.prevent.stop @mousedown.stop>
+    <div class="model-select" :class="modelSelectClasses" @mousedown.stop>
       <div class="model-select-content">
         <div class="model-info">
           <span class="model-text text" :title="displayModelTitle">{{ displayModelText }}</span>

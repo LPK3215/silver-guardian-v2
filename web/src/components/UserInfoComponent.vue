@@ -22,44 +22,64 @@
         </div>
       </div>
       <template #overlay>
-        <a-menu>
-          <a-menu-item key="user-info" @click="openProfile">
-            <div class="user-info-display">
-              <div class="user-menu-username">{{ userStore.username }}</div>
-              <div class="user-menu-details">
-                <span class="user-menu-info">ID: {{ userStore.uid }}</span>
-                <span class="user-menu-role">{{ userRoleText }}</span>
+        <div class="user-menu-panel">
+          <a-menu>
+            <a-menu-item key="user-info" @click="openProfile">
+              <div class="user-info-display">
+                <div class="user-menu-username">{{ userStore.username }}</div>
+                <div class="user-menu-details">
+                  <span class="user-menu-info">ID: {{ userStore.uid }}</span>
+                  <span class="user-menu-role">{{ userRoleText }}</span>
+                </div>
               </div>
+            </a-menu-item>
+            <a-menu-divider />
+            <a-menu-item key="docs" @click="openDocs">
+              <template #icon><BookOpen :size="16" /></template>
+              <span class="menu-text">文档中心</span>
+            </a-menu-item>
+            <a-menu-item key="theme" @click="toggleTheme">
+              <template #icon>
+                <Sun v-if="themeStore.isDark" :size="16" />
+                <Moon v-else :size="16" />
+              </template>
+              <span class="menu-text">{{
+                themeStore.isDark ? '切换到浅色模式' : '切换到深色模式 (Beta)'
+              }}</span>
+            </a-menu-item>
+            <a-menu-divider v-if="userStore.isAdmin" />
+            <a-menu-item v-if="userStore.isSuperAdmin" key="debug" @click="showDebug = true">
+              <template #icon><Terminal :size="16" /></template>
+              <span class="menu-text">调试面板（非生产环境）</span>
+            </a-menu-item>
+            <a-menu-item v-if="userStore.isAdmin" key="setting" @click="goToSetting">
+              <template #icon><Settings :size="16" /></template>
+              <span class="menu-text">系统设置</span>
+            </a-menu-item>
+            <a-menu-item key="logout" @click="logout">
+              <template #icon><LogOut :size="16" /></template>
+              <span class="menu-text">退出登录</span>
+            </a-menu-item>
+          </a-menu>
+          <div class="color-scheme-section">
+            <div class="color-scheme-label">
+              <Palette :size="16" />
+              <span>主题色</span>
             </div>
-          </a-menu-item>
-          <a-menu-divider />
-          <a-menu-item key="docs" @click="openDocs">
-            <template #icon><BookOpen :size="16" /></template>
-            <span class="menu-text">文档中心</span>
-          </a-menu-item>
-          <a-menu-item key="theme" @click="toggleTheme">
-            <template #icon>
-              <Sun v-if="themeStore.isDark" :size="16" />
-              <Moon v-else :size="16" />
-            </template>
-            <span class="menu-text">{{
-              themeStore.isDark ? '切换到浅色模式' : '切换到深色模式 (Beta)'
-            }}</span>
-          </a-menu-item>
-          <a-menu-divider v-if="userStore.isAdmin" />
-          <a-menu-item v-if="userStore.isSuperAdmin" key="debug" @click="showDebug = true">
-            <template #icon><Terminal :size="16" /></template>
-            <span class="menu-text">调试面板（非生产环境）</span>
-          </a-menu-item>
-          <a-menu-item v-if="userStore.isAdmin" key="setting" @click="goToSetting">
-            <template #icon><Settings :size="16" /></template>
-            <span class="menu-text">系统设置</span>
-          </a-menu-item>
-          <a-menu-item key="logout" @click="logout">
-            <template #icon><LogOut :size="16" /></template>
-            <span class="menu-text">退出登录</span>
-          </a-menu-item>
-        </a-menu>
+            <div class="color-dots">
+              <span
+                v-for="(scheme, key) in COLOR_SCHEMES"
+                :key="key"
+                class="color-dot"
+                :class="{ active: themeStore.colorScheme === key }"
+                :style="{ background: scheme.bright }"
+                :title="scheme.label"
+                :data-key="key"
+                @click="handleColorSchemeChange(key)"
+              />
+            </div>
+          </div>
+        </div>
       </template>
     </a-dropdown>
     <a-button v-else-if="showButton" type="primary" @click="goToLogin"> 登录 </a-button>
@@ -75,8 +95,8 @@ import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import DebugComponent from '@/components/DebugComponent.vue'
 import { message } from 'ant-design-vue'
-import { BookOpen, Sun, Moon, LogOut, Settings, Terminal } from 'lucide-vue-next'
-import { useThemeStore } from '@/stores/theme'
+import { BookOpen, Sun, Moon, LogOut, Settings, Terminal, Palette } from 'lucide-vue-next'
+import { useThemeStore, COLOR_SCHEMES } from '@/stores/theme'
 import { generatePixelAvatar } from '@/utils/pixelAvatar'
 import FallbackAvatar from '@/components/common/FallbackAvatar.vue'
 
@@ -137,6 +157,10 @@ const openDocs = () => {
 
 const toggleTheme = () => {
   themeStore.toggleTheme()
+}
+
+const handleColorSchemeChange = (key) => {
+  themeStore.setColorScheme(key)
 }
 
 // 前往设置页
@@ -296,6 +320,7 @@ const openProfile = () => {
 
 :deep(.ant-dropdown-menu) {
   padding: 8px 0;
+  border-bottom: none;
 }
 
 :deep(.ant-dropdown-menu-title-content) {
@@ -314,5 +339,53 @@ const openProfile = () => {
 
 .menu-text {
   line-height: 20px;
+}
+
+.user-menu-panel {
+  background: var(--gray-0);
+  border-radius: 8px;
+  box-shadow: 0 6px 16px var(--shadow-3);
+  overflow: hidden;
+}
+
+.color-scheme-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-top: 1px solid var(--gray-100);
+  gap: 12px;
+}
+
+.color-scheme-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--gray-900);
+}
+
+.color-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.color-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--gray-200);
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    transform: scale(1.15);
+  }
+
+  &.active {
+    border-color: var(--gray-800);
+    transform: scale(1.1);
+  }
 }
 </style>

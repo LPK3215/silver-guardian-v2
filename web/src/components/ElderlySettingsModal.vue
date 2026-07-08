@@ -46,6 +46,23 @@
           </div>
         </a-form-item>
 
+        <!-- 主题色 -->
+        <a-form-item label="主题色">
+          <div class="color-scheme-options">
+            <button
+              v-for="(scheme, key) in COLOR_SCHEMES"
+              :key="key"
+              type="button"
+              class="color-scheme-option"
+              :class="{ active: currentColorScheme === key }"
+              @click="setColorScheme(key)"
+            >
+              <span class="color-scheme-dot" :style="{ background: scheme.bright }" />
+              <span class="color-scheme-name">{{ scheme.label }}</span>
+            </button>
+          </div>
+        </a-form-item>
+
         <!-- 保存按钮 -->
         <div style="display: flex; gap: 12px; margin-top: 24px;">
           <a-button type="primary" size="large" style="flex: 1; min-height: 48px;" @click="handleSave">
@@ -63,6 +80,11 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
+import { useThemeStore, COLOR_SCHEMES } from '@/stores/theme'
+
+const themeStore = useThemeStore()
+const currentColorScheme = computed(() => themeStore.colorScheme)
+const setColorScheme = (key) => themeStore.setColorScheme(key)
 
 const props = defineProps({
   open: { type: Boolean, default: false },
@@ -113,17 +135,7 @@ function handleSave() {
 
 function applyFontSize(pref) {
   const sizes = { normal: '16px', large: '18px', xlarge: '22px' }
-  const root = document.documentElement
-  if (pref === 'normal') {
-    root.style.removeProperty('--elderly-font-size')
-  } else {
-    root.style.setProperty('--elderly-font-size', sizes[pref])
-  }
-  // 同时调整 .agent-page 的 font-size
-  const agentPage = document.querySelector('.agent-page')
-  if (agentPage) {
-    agentPage.style.fontSize = sizes[pref] || '18px'
-  }
+  document.documentElement.style.setProperty('--elderly-font-size', sizes[pref])
 }
 
 // 页面加载时应用已保存的字号（放在 onMounted 中执行，避免 setup 阶段操作 DOM）
@@ -155,5 +167,43 @@ onMounted(() => {
   margin-top: 8px;
   color: var(--gray-700, #4c4d4d);
   line-height: 1.6;
+}
+
+.color-scheme-options {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.color-scheme-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border: 2px solid var(--gray-200, #e4e6e6);
+  border-radius: 10px;
+  background: var(--gray-0, #fff);
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.15s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &.active {
+    border-color: var(--gray-800, #323333);
+  }
+}
+
+.color-scheme-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.color-scheme-name {
+  font-size: 14px;
+  color: var(--gray-800, #323333);
 }
 </style>

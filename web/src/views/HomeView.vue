@@ -37,8 +37,9 @@
         </div>
         <div class="header-actions">
           <a
+            v-if="false"
             class="github-link"
-            href="/"
+            href="https://github.com/LPK3215/silver-guardian-v2"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
@@ -224,8 +225,8 @@ import {
 const router = useRouter()
 const userStore = useUserStore()
 const infoStore = useInfoStore()
-const repoUrl = ''
-const faqUrl = ''
+const repoUrl = 'https://github.com/LPK3215/silver-guardian-v2'
+const faqUrl = 'https://github.com/LPK3215/silver-guardian-v2#faq'
 
 // 加载状态
 const isLoading = ref(true)

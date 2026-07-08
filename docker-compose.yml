@@ -1,3 +1,18 @@
+# ============================================
+# Yuxi Docker Compose
+# ============================================
+# 默认模式（开发推荐）：
+#   docker compose up -d
+#   → 后端 (api + worker) + 基础设施 (PostgreSQL/Redis/MinIO/Sandbox) 在 Docker 中
+#   → 前端在本地运行：cd web && pnpm dev
+#
+# 全 Docker 模式（前端也在容器里）：
+#   docker compose --profile full up -d
+#
+# 完整模式（含 Neo4j/Milvus/MinerU/PaddleX）：
+#   docker compose --profile full --profile all up -d
+# ============================================
+
 x-api-worker-env: &api-worker-env
   HOST_IP: ${HOST_IP:-}
   LITE_MODE: ${LITE_MODE:-false}
@@ -182,6 +197,8 @@ services:
       target: development
     image: yuxi-web:${YUXI_VERSION:-0.7.1.beta1}
     container_name: web-dev
+    profiles:
+      - full
     volumes:
       - ./web/src:/app/src
       - ./web/public:/app/public

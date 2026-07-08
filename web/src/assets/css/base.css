@@ -186,6 +186,75 @@
   scrollbar-color: var(--gray-200) transparent;
 }
 
+/* ===== 多色方案 ===== */
+/* 通过 [data-color-scheme] 属性覆盖 --main-* 变量 */
+
+/* 海蓝 */
+:root[data-color-scheme="blue"] {
+  --main-1000: #000c1f;
+  --main-900: #001540;
+  --main-800: #00255c;
+  --main-700: #003a8c;
+  --main-600: #0050b3;
+  --main-500: #096dd9;
+  --main-400: #1890ff;
+  --main-300: #40a9ff;
+  --main-200: #91d5ff;
+  --main-100: #bae7ff;
+  --main-50: #e6f7ff;
+  --main-40: #f0f8ff;
+  --main-30: #f5fbff;
+  --main-20: #fafdff;
+  --main-10: #fcfeff;
+  --main-5: #fdfeff;
+  --main-1: #fefeff;
+  --main-bright: #1890ff;
+}
+
+/* 翠绿 */
+:root[data-color-scheme="green"] {
+  --main-1000: #04120a;
+  --main-900: #0a2e12;
+  --main-800: #144521;
+  --main-700: #1b5e20;
+  --main-600: #2e7d32;
+  --main-500: #388e3c;
+  --main-400: #4caf50;
+  --main-300: #81c784;
+  --main-200: #a5d6a7;
+  --main-100: #c8e6c9;
+  --main-50: #e8f5e9;
+  --main-40: #f1f8f1;
+  --main-30: #f5fbf5;
+  --main-20: #fafdfa;
+  --main-10: #fcfefc;
+  --main-5: #fdfffd;
+  --main-1: #fefffe;
+  --main-bright: #4caf50;
+}
+
+/* 青碧 */
+:root[data-color-scheme="teal"] {
+  --main-1000: #001a17;
+  --main-900: #002d27;
+  --main-800: #004d40;
+  --main-700: #00695c;
+  --main-600: #00796b;
+  --main-500: #00897b;
+  --main-400: #009688;
+  --main-300: #26a69a;
+  --main-200: #80cbc4;
+  --main-100: #b2dfdb;
+  --main-50: #e0f2f1;
+  --main-40: #eff8f7;
+  --main-30: #f5fbfa;
+  --main-20: #fafdfa;
+  --main-10: #fcfdfd;
+  --main-5: #fdfffe;
+  --main-1: #fefffe;
+  --main-bright: #009688;
+}
+
 /* Page Padding 响应式断点 */
 @media (min-width: 1440px) {
   :root {

@@ -1,38 +1,45 @@
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { theme } from 'ant-design-vue'
 
+// 色系定义：key → { label, primary(对应 --main-600), bright(对应 --main-bright) }
+export const COLOR_SCHEMES = {
+  amber: { label: '琥珀', primary: '#d46b08', bright: '#fa8c16' },
+  blue: { label: '海蓝', primary: '#0050b3', bright: '#1890ff' },
+  green: { label: '翠绿', primary: '#2e7d32', bright: '#4caf50' },
+  teal: { label: '青碧', primary: '#00796b', bright: '#009688' },
+}
+
 export const useThemeStore = defineStore('theme', () => {
-  // 从 localStorage 读取保存的主题，默认为浅色
-  const isDark = ref(localStorage.getItem('theme') === 'dark')
+  const savedTheme = localStorage.getItem('theme')
+  const isDark = ref(savedTheme === 'dark')
+  const colorScheme = ref(localStorage.getItem('color_scheme') || 'amber')
 
   // 公共主题配置
-  const commonTheme = {
+  const commonTheme = computed(() => ({
     token: {
       fontFamily:
         "'HarmonyOS Sans SC', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;",
-      colorPrimary: '#d46b08',
+      colorPrimary: COLOR_SCHEMES[colorScheme.value].primary,
       colorLink: 'var(--main-color)',
       colorLinkHover: 'var(--main-600)',
       colorLinkActive: 'var(--main-800)',
       borderRadius: 8,
-      wireframe: false
-    }
-  }
+      wireframe: false,
+    },
+  }))
 
   // 浅色主题配置
-  const lightTheme = {
-    ...commonTheme
-  }
+  const lightTheme = computed(() => ({ ...commonTheme.value }))
 
   // 深色主题配置
-  const darkTheme = {
-    ...commonTheme,
-    algorithm: theme.darkAlgorithm
-  }
+  const darkTheme = computed(() => ({
+    ...commonTheme.value,
+    algorithm: theme.darkAlgorithm,
+  }))
 
   // 当前主题配置
-  const currentTheme = ref(isDark.value ? darkTheme : lightTheme)
+  const currentTheme = computed(() => (isDark.value ? darkTheme.value : lightTheme.value))
 
   // 切换主题
   function toggleTheme() {
@@ -42,9 +49,16 @@ export const useThemeStore = defineStore('theme', () => {
   // 设置主题
   function setTheme(dark) {
     isDark.value = dark
-    currentTheme.value = dark ? darkTheme : lightTheme
     localStorage.setItem('theme', dark ? 'dark' : 'light')
     updateDocumentTheme()
+  }
+
+  // 设置色系
+  function setColorScheme(scheme) {
+    if (!COLOR_SCHEMES[scheme]) return
+    colorScheme.value = scheme
+    localStorage.setItem('color_scheme', scheme)
+    updateDocumentColorScheme()
   }
 
   // 更新 document 的主题类
@@ -56,13 +70,26 @@ export const useThemeStore = defineStore('theme', () => {
     }
   }
 
-  // 初始化时设置主题
+  // 更新 document 的色系属性
+  function updateDocumentColorScheme() {
+    if (colorScheme.value === 'amber') {
+      document.documentElement.removeAttribute('data-color-scheme')
+    } else {
+      document.documentElement.setAttribute('data-color-scheme', colorScheme.value)
+    }
+  }
+
+  // 初始化
   updateDocumentTheme()
+  updateDocumentColorScheme()
 
   return {
     isDark,
+    colorScheme,
+    colorSchemes: COLOR_SCHEMES,
     currentTheme,
     toggleTheme,
-    setTheme
+    setTheme,
+    setColorScheme,
   }
 })

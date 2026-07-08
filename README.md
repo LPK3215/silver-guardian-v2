@@ -1,10 +1,10 @@
 # 银发守护 —— 智慧养老 AI 助手
 
-> 基于 Yuxi 框架 (v0.7.1b1) 改造的面向养老场景的 AI 对话与知识库问答系统。
+> 面向养老场景的 AI 对话与知识库问答系统。
 
 ## 项目概述
 
-银发守护是一个为老年人及其照护者设计的 AI 智能助手平台，提供健康咨询、政策解读、护理知识和生活陪伴等服务。系统基于 Yuxi 框架构建，集成了 DeepSeek 大模型，并针对老年用户的使用习惯进行了适老化改造。
+银发守护是一个为老年人及其照护者设计的 AI 智能助手平台，提供健康咨询、政策解读、护理知识和生活陪伴等服务。系统集成 DeepSeek 大模型，并针对老年用户的使用习惯进行了适老化改造。
 
 ## 核心功能
 
@@ -102,7 +102,7 @@ docker compose up -d etcd milvus
 ### 4. 首次配置
 
 1. 设置管理员账号密码
-2. 系统设置 → 模型配置 → 启用 DeepSeek → 确认 API Key → 添加 `deepseek-chat`
+2. 系统设置 → 模型配置 → 启用 SiliconFlow → 确认 API Key → 默认模型为 `deepseek-ai/DeepSeek-V4-Flash`
 3. （可选）启用 SiliconFlow → 填入 API Key → 添加 `BAAI/bge-m3` 作为 Embedding 模型
 4. 智能体管理 → 确认 4 个养老智能体已就绪
 5. 开始对话
@@ -114,14 +114,13 @@ silver-guardian-yuxi/
 ├── README.md                              # 本文档
 ├── .env                                   # 环境变量
 ├── dev.ps1                                # 本地开发一键启动脚本
-├── docker-compose.yml                     # Docker 编排（全量部署）
-├── docker-compose.dev.yml                 # Docker 编排（仅 Redis/MinIO/Sandbox）
+├── docker-compose.yml                     # Docker 编排（后端+基础设施，前端本地运行）
 ├── knowledge_docs/                        # 养老知识文档
 │   ├── 老年人权益保障法要点.md
 │   ├── 老年慢性病日常管理指南.md
 │   ├── 老年人护理操作规范.md
 │   └── 老年人防诈骗安全指南.md
-├── backend/                               # 后端（FastAPI + Yuxi 框架）
+├── backend/                               # 后端（FastAPI）
 │   ├── run_dev.py                         # 本地启动脚本（解决 Windows 事件循环问题）
 │   └── package/yuxi/
 │       ├── agents/skills/buildin/
@@ -150,7 +149,7 @@ silver-guardian-yuxi/
 
 ## 自定义代码清单
 
-以下是对 Yuxi 原始代码的改动，均经过稳定性审查：
+以下是对原始代码的改动，均经过稳定性审查：
 
 | 文件 | 类型 | 说明 |
 |------|------|------|
@@ -179,8 +178,8 @@ silver-guardian-yuxi/
 |----|------|
 | 前端 | Vue 3 + Ant Design Vue + Vite |
 | 后端 | FastAPI + Python 3.11+ |
-| 框架 | Yuxi v0.7.1b1 |
-| 大模型 | DeepSeek (deepseek-chat) |
+| 框架 | LangGraph + LightRAG |
+| 大模型 | DeepSeek-V4-Flash (SiliconFlow) |
 | 向量数据库 | Milvus |
 | 缓存 | Redis |
 | 数据库 | PostgreSQL |
@@ -191,7 +190,7 @@ silver-guardian-yuxi/
 
 | 版本 | 说明 |
 |------|------|
-| v0.1.0 | 基于 Yuxi v0.7.1b1 初始化，品牌定制，Docker 部署 |
+| v0.1.0 | 项目初始化，品牌定制，Docker 部署 |
 | v0.2.0 | 4 个养老智能体 + 知识库文档 + 子智能体调度 + 自定义 Skills |
 | v0.3.0 | 适老化界面 + 紧急求助识别 + 语音输入 + 快捷问题 + 设置页 |
 | v0.4.0 | 语音朗读(TTS) + 稳定性加固 |

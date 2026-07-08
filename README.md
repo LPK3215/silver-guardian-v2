@@ -59,6 +59,11 @@ DEEPSEEK_API_KEY=sk-你的key
 # 可选 - 知识库向量化（不配则知识内容嵌入提示词）
 SILICONFLOW_API_KEY=sk-你的key
 
+# 数据库（本地开发用 localhost）
+POSTGRES_URL=postgresql+asyncpg://postgres:postgres@localhost:5432/yuxi
+REDIS_URL=redis://localhost:6379/0
+MINIO_URI=http://localhost:9000
+
 # 品牌配置
 YUXI_BRAND_FILE_PATH=package/yuxi/config/static/info.local.yaml
 LITE_MODE=false
@@ -66,8 +71,30 @@ LITE_MODE=false
 
 ### 3. 启动
 
+#### 方式一：本地开发模式（推荐，内存占用 ~2GB）
+
+前端和后端跑在本地，仅 Redis/MinIO/Sandbox 走 Docker：
+
 ```powershell
-docker compose up -d postgres redis minio milvus etcd api web
+# 一键启动
+.\dev.ps1
+
+# 或分步启动
+.\dev.ps1 docker       # 启动 Docker 服务
+.\dev.ps1 backend     # 启动后端 (localhost:5050)
+.\dev.ps1 frontend    # 启动前端 (localhost:5173)
+.\dev.ps1 stop        # 停止全部
+```
+
+#### 方式二：全 Docker 模式（服务器部署用）
+
+```powershell
+docker compose up -d postgres redis minio sandbox-provisioner api worker web
+```
+
+需要知识库 RAG 时加上 Milvus：
+```powershell
+docker compose up -d etcd milvus
 ```
 
 访问 `http://localhost:5173` 即可使用。
@@ -86,13 +113,16 @@ docker compose up -d postgres redis minio milvus etcd api web
 silver-guardian-yuxi/
 ├── README.md                              # 本文档
 ├── .env                                   # 环境变量
-├── docker-compose.yml                     # Docker 编排
+├── dev.ps1                                # 本地开发一键启动脚本
+├── docker-compose.yml                     # Docker 编排（全量部署）
+├── docker-compose.dev.yml                 # Docker 编排（仅 Redis/MinIO/Sandbox）
 ├── knowledge_docs/                        # 养老知识文档
 │   ├── 老年人权益保障法要点.md
 │   ├── 老年慢性病日常管理指南.md
 │   ├── 老年人护理操作规范.md
 │   └── 老年人防诈骗安全指南.md
 ├── backend/                               # 后端（FastAPI + Yuxi 框架）
+│   ├── run_dev.py                         # 本地启动脚本（解决 Windows 事件循环问题）
 │   └── package/yuxi/
 │       ├── agents/skills/buildin/
 │       │   ├── elderly-assessment/        # 自定义技能：老年评估

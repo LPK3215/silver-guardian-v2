@@ -1,4 +1,5 @@
 .yuxi/
+.codebuddy/
 
 *.egg-info
 

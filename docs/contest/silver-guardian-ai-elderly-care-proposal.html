@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>银发守护 Silver Guardian — AI 知识库与智能体平台 创意提案</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+      color: #1e293b;
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 30%, #1d4ed8 60%, #0891b2 100%);
+      padding: 100px 24px 120px;
+      text-align: center;
+      color: #fff;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 80%, rgba(56,189,248,0.15), transparent),
+        radial-gradient(ellipse 60% 50% at 80% 20%, rgba(45,212,191,0.12), transparent),
+        radial-gradient(ellipse 40% 60% at 50% 50%, rgba(99,102,241,0.08), transparent);
+      pointer-events: none;
+    }
+    .hero > * { position: relative; z-index: 1; }
+    .hero-icon {
+      width: 72px; height: 72px;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin-bottom: 28px;
+    }
+    .hero h1 {
+      font-size: 3em;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero .subtitle {
+      font-size: 1.15em;
+      color: rgba(255,255,255,0.75);
+      max-width: 640px;
+      margin: 0 auto 32px;
+      font-weight: 400;
+    }
+    .hero .track-tags {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .hero .tag {
+      padding: 8px 20px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 999px;
+      font-size: 0.88em;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    /* Container */
+    .container { max-width: 860px; margin: 0 auto; padding: 0 24px 80px; }
+
+    /* Section */
+    .section {
+      background: #fff;
+      border-radius: 20px;
+      padding: 48px 44px;
+      margin-top: -40px;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 24px rgba(0,0,0,0.04);
+      margin-bottom: 28px;
+    }
+    .section:first-of-type { margin-top: -40px; }
+    .section:not(:first-of-type) { margin-top: 0; }
+    .section h2 {
+      font-size: 1.4em;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section h2::before {
+      content: '';
+      display: inline-block;
+      width: 4px; height: 24px;
+      background: linear-gradient(180deg, #2563eb, #14b8a6);
+      border-radius: 2px;
+    }
+    .section p { color: #475569; }
+
+    /* Pain Grid */
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .pain-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 28px;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .pain-card:hover {
+      box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+      transform: translateY(-2px);
+      border-color: #cbd5e1;
+    }
+    .pain-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, #f59e0b, #f97316);
+      opacity: 0.6;
+    }
+    .pain-card .icon {
+      font-size: 1.6em;
+      margin-bottom: 10px;
+    }
+    .pain-card h3 {
+      font-size: 1.05em;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+    .pain-card p {
+      font-size: 0.9em;
+      color: #64748b;
+      line-height: 1.7;
+    }
+
+    /* User Table */
+    .user-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-top: 8px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+    }
+    .user-table th {
+      background: #f1f5f9;
+      color: #475569;
+      padding: 14px 20px;
+      text-align: left;
+      font-size: 0.82em;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .user-table td {
+      padding: 16px 20px;
+      border-top: 1px solid #f1f5f9;
+      font-size: 0.93em;
+      color: #334155;
+      background: #fff;
+    }
+    .user-table td:first-child {
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    /* Feature List */
+    .feature-list { list-style: none; display: grid; gap: 12px; }
+    .feature-list li {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 24px 28px;
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      transition: all 0.25s ease;
+    }
+    .feature-list li:hover {
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      border-color: #cbd5e1;
+      transform: translateX(4px);
+    }
+    .feature-list .num {
+      width: 36px; height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      color: #fff;
+      border-radius: 10px;
+      font-size: 0.88em;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .feature-list .text strong {
+      display: block;
+      font-size: 1.02em;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+    .feature-list .text span {
+      font-size: 0.9em;
+      color: #64748b;
+      line-height: 1.7;
+    }
+
+    /* Tech Grid */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+    }
+    .tech-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 20px 16px;
+      text-align: center;
+      transition: all 0.25s ease;
+    }
+    .tech-item:hover {
+      background: #eff6ff;
+      border-color: #93c5fd;
+      box-shadow: 0 2px 12px rgba(37,99,235,0.08);
+    }
+    .tech-item .layer {
+      font-size: 0.72em;
+      color: #94a3b8;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+    .tech-item .name {
+      font-size: 0.95em;
+      color: #1e3a5f;
+      font-weight: 700;
+    }
+
+    /* Highlight Box */
+    .highlight-box {
+      background: linear-gradient(135deg, #eff6ff, #f0f9ff);
+      border: 1px solid #bfdbfe;
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-top: 20px;
+    }
+    .highlight-box strong { color: #1d4ed8; font-weight: 700; }
+
+    /* Architecture Diagram */
+    .arch-diagram {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 12px;
+    }
+    .arch-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .arch-row.primary .arch-box {
+      padding: 16px 28px;
+      font-size: 0.95em;
+      border-radius: 14px;
+    }
+    .arch-box {
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 0.85em;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .arch-box.frontend {
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      border: 1px solid #fcd34d;
+      color: #92400e;
+    }
+    .arch-box.backend {
+      background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+      border: 1px solid #93c5fd;
+      color: #1e40af;
+    }
+    .arch-box.agent {
+      background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+      border: 1px solid #c4b5fd;
+      color: #6d28d9;
+    }
+    .arch-box.storage {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      color: #475569;
+    }
+    .arch-box.tool {
+      background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+      border: 1px solid #86efac;
+      color: #166534;
+    }
+    .arch-arrow {
+      color: #94a3b8;
+      font-size: 1.3em;
+      font-weight: 300;
+    }
+    .arch-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 40px 24px;
+      color: #94a3b8;
+      font-size: 0.85em;
+    }
+    .footer p { margin: 4px 0; }
+
+    @media (max-width: 640px) {
+      .hero { padding: 60px 20px 80px; }
+      .hero h1 { font-size: 2em; }
+      .section { padding: 32px 24px; }
+      .pain-grid { grid-template-columns: 1fr; }
+      .tech-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-icon">&#128150;</div>
+  <h1>银发守护 Silver Guardian</h1>
+  <p class="subtitle">基于 LangGraph + RAG + 知识图谱的 AI 智能体平台，为养老场景打造懂知识、会推理、可信赖的 AI 助手</p>
+  <div class="track-tags">
+    <span class="tag">社会服务赛道</span>
+    <span class="tag">社会公益</span>
+    <span class="tag">智慧助老</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section">
+    <h2>创意介绍</h2>
+    <p>银发守护是一个面向养老场景的 AI 知识库与智能体平台。用户通过统一的 Web 界面与 AI 助手对话，系统自动从文档知识库、结构化数据库、知识图谱等多源知识中检索信息，并给出带来源引用的回答。管理员可在同一平台上管理知识文档、维护数据表、查看对话历史与运营指标。</p>
+    <div class="highlight-box">
+      <strong>核心亮点</strong>&nbsp;&nbsp;LangGraph Agent 工作流支持多步骤推理和工具调用；RAG 双层检索（文档 + 数据库）+ 知识图谱实体关联，让 AI 回答不局限于关键词匹配，而是具备真正的语义理解和溯源能力。
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>想解决的问题</h2>
+    <div class="pain-grid">
+      <div class="pain-card">
+        <div class="icon">&#128218;</div>
+        <h3>信息孤岛</h3>
+        <p>养老政策文件在民政、卫健、人社各条线分散发布，老人档案和健康记录散落在不同的 Excel 表格里，知识无法统一检索。</p>
+      </div>
+      <div class="pain-card">
+        <div class="icon">&#9203;</div>
+        <h3>知识更新滞后</h3>
+        <p>政策文件更新频繁，传统系统每次改内容都要找开发人员改代码，管理人员无法自主维护知识库。</p>
+      </div>
+      <div class="pain-card">
+        <div class="icon">&#9888;&#65039;</div>
+        <h3>AI 回答不可信</h3>
+        <p>传统聊天机器人的回答是"黑盒"，用户无法判断信息来源，不敢信任。必须有来源引用和原文预览。</p>
+      </div>
+      <div class="pain-card">
+        <div class="icon">&#129504;</div>
+        <h3>复杂场景无法应对</h3>
+        <p>养老场景常需要多步推理——例如"某老人血压偏高，根据社区政策能申请什么服务"，需要同时查健康数据、政策文档和服务清单。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>目标用户</h2>
+    <table class="user-table">
+      <thead>
+        <tr>
+          <th>用户群体</th>
+          <th>核心需求</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>居家老人</td>
+          <td>低门槛 AI 陪伴对话、健康知识咨询、养老政策问答，用大白话提问</td>
+        </tr>
+        <tr>
+          <td>家属 / 子女</td>
+          <td>了解老人关注的健康和政策问题，查看对话记录和风险提醒</td>
+        </tr>
+        <tr>
+          <td>社区照护者 / 管理员</td>
+          <td>管理知识库文档（上传/编辑/检索）、维护结构化养老数据表、查看系统运营仪表盘</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>系统架构</h2>
+    <div class="arch-diagram">
+      <div class="arch-row primary">
+        <span class="arch-box frontend">Vue 3 前端</span>
+        <span class="arch-arrow">&#8594;</span>
+        <span class="arch-box backend">FastAPI 后端</span>
+        <span class="arch-arrow">&#8594;</span>
+        <span class="arch-box agent">LangGraph Agent</span>
+      </div>
+      <div class="arch-divider"></div>
+      <div class="arch-row">
+        <span class="arch-box storage">PostgreSQL</span>
+        <span class="arch-box storage">Redis</span>
+        <span class="arch-box storage">Milvus 向量库</span>
+        <span class="arch-box storage">Neo4j 图数据库</span>
+        <span class="arch-box storage">MinIO 对象存储</span>
+      </div>
+      <div class="arch-divider"></div>
+      <div class="arch-row">
+        <span class="arch-box tool">Docling 文档解析</span>
+        <span class="arch-box tool">RapidOCR</span>
+        <span class="arch-box tool">Sandbox 沙箱执行</span>
+        <span class="arch-box tool">LightRAG 知识图谱</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>核心功能</h2>
+    <ul class="feature-list">
+      <li>
+        <span class="num">1</span>
+        <div class="text">
+          <strong>LangGraph Agent 智能对话</strong>
+          <span>基于 LangGraph v1 的 Agent 工作流系统，支持流式对话（SSE）、多步骤推理、工具调用和子 Agent 协作，可编排复杂养老场景的对话链路。</span>
+        </div>
+      </li>
+      <li>
+        <span class="num">2</span>
+        <div class="text">
+          <strong>RAG 多源知识检索 + 来源溯源</strong>
+          <span>文档知识（Milvus 向量检索）+ 结构化数据库（PostgreSQL SQL 检索）双层 RAG，回答时标注来源并可点击预览原文，支持 Markdown、PDF、Word 等多种文档格式。</span>
+        </div>
+      </li>
+      <li>
+        <span class="num">3</span>
+        <div class="text">
+          <strong>LightRAG 知识图谱</strong>
+          <span>基于 LightRAG + Neo4j 的知识图谱引擎，自动抽取实体关系，支持图谱可视化和图谱增强问答，让 AI 理解"张三属于哪个社区、该社区有什么政策"这类实体关联问题。</span>
+        </div>
+      </li>
+      <li>
+        <span class="num">4</span>
+        <div class="text">
+          <strong>知识库管理后台</strong>
+          <span>Markdown 文档上传/编辑/全文检索 + 结构化数据表增删改查 + 预览弹窗 + 系统运营仪表盘。管理员可自主维护知识库，无需开发人员介入。</span>
+        </div>
+      </li>
+      <li>
+        <span class="num">5</span>
+        <div class="text">
+          <strong>文档智能解析</strong>
+          <span>集成 Docling 和 RapidOCR，支持 PDF、Word、图片等多种格式的自动解析入库，降低知识录入门槛。</span>
+        </div>
+      </li>
+      <li>
+        <span class="num">6</span>
+        <div class="text">
+          <strong>沙箱安全执行</strong>
+          <span>Agent 可在隔离的 Docker 沙箱中安全执行代码，支持数据分析、报表生成等需要计算的场景，不影响主系统安全。</span>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>技术方案</h2>
+    <div class="tech-grid">
+      <div class="tech-item">
+        <div class="layer">前端</div>
+        <div class="name">Vue 3 + Vite</div>
+      </div>
+      <div class="tech-item">
+        <div class="layer">后端</div>
+        <div class="name">FastAPI</div>
+      </div>
+      <div class="tech-item">
+        <div class="layer">Agent 框架</div>
+        <div class="name">LangGraph v1</div>
+      </div>
+      <div class="tech-item">
+        <div class="layer">知识图谱</div>
+        <div class="name">LightRAG + Neo4j</div>
+      </div>
+      <div class="tech-item">
+        <div class="layer">向量数据库</div>
+        <div class="name">Milvus</div>
+      </div>
+      <div class="tech-item">
+        <div class="layer">关系数据库</div>
+        <div class="name">PostgreSQL 16</div>
+      </div>
+      <div class="tech-item">
+        <div class="layer">缓存</div>
+        <div class="name">Redis 7</div>
+      </div>
+      <div class="tech-item">
+        <div class="layer">对象存储</div>
+        <div class="name">MinIO</div>
+      </div>
+      <div class="tech-item">
+        <div class="layer">文档解析</div>
+        <div class="name">Docling + RapidOCR</div>
+      </div>
+      <div class="tech-item">
+        <div class="layer">部署</div>
+        <div class="name">Docker Compose</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>价值与意义</h2>
+    <p><strong>社会价值：</strong>面向真实养老场景，用 AI 降低老人获取陪伴、健康管理和公共服务信息的门槛。知识图谱让 AI 回答具备实体关联和语义理解能力，而非简单的关键词匹配。</p>
+    <p style="margin-top:12px;"><strong>产品价值：</strong>不是概念稿，是已经具备完整前后端、Agent 工作流、知识图谱、文档解析的全功能可运行 Demo，支持 Docker Compose 一键部署。</p>
+    <p style="margin-top:12px;"><strong>技术价值：</strong>LangGraph Agent 多步骤推理 + RAG 多源检索 + LightRAG 知识图谱 + 沙箱执行的四合一架构，在养老 AI 领域具有创新性。来源透明设计让 AI 回答可信可溯源。</p>
+  </div>
+
+</div>
+
+<div class="footer">
+  <p>银发守护 Silver Guardian &middot; TRAE AI 创造力大赛参赛作品</p>
+  <p>全程使用 TRAE IDE 开发 &middot; 2026</p>
+</div>
+
+</body>
+</html>

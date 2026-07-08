@@ -399,9 +399,11 @@ const loadData = async () => {
     // 健康检查通过后加载配置
     await infoStore.loadInfoConfig()
     startSubtitleCarousel()
-    const repo = await fetchGithubRepo()
-    githubStats.value = repo
-    startBadgeTyping(repo?.stars ?? null)
+    if (GITHUB_REPO_API) {
+      const repo = await fetchGithubRepo()
+      githubStats.value = repo
+      startBadgeTyping(repo?.stars ?? null)
+    }
   } catch (e) {
     console.error('加载失败:', e)
     stopBadgeTyping()

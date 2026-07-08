@@ -205,6 +205,8 @@ services:
   graph:
     image: neo4j:5.26
     container_name: graph
+    profiles:
+      - all
     ports:
       - "7474:7474"
       - "7687:7687"

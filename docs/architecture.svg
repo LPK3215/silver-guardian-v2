@@ -1,0 +1,90 @@
+        <?xml version="1.0" encoding="UTF-8"?>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 680" font-family="'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+        <rect width="880" height="680" fill="#0d1117"/>
+<text x="440" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#e6edf3">银发守护 — 系统架构</text>
+<rect x="340" y="50" width="200" height="50" rx="8" fill="#161b22" stroke="#42b883" stroke-width="1.5"/>
+<text x="440" y="74" text-anchor="middle" font-size="14" font-weight="600" fill="#e6edf3">用户浏览器</text>
+<text x="440" y="94" text-anchor="middle" font-size="11" fill="#8b949e">老年人 / 照护者 / 管理员</text>
+<rect x="250" y="130" width="380" height="60" rx="8" fill="#1a2332" stroke="#42b883" stroke-width="1.5"/>
+<text x="440" y="154" text-anchor="middle" font-size="14" font-weight="600" fill="#42b883">Vue 3 + Ant Design Vue</text>
+<text x="440" y="174" text-anchor="middle" font-size="11" fill="#8b949e">对话界面 · 知识库管理 · 适老化 UI · 语音输入/TTS</text>
+<rect x="100" y="230" width="340" height="60" rx="8" fill="#0d1f1c" stroke="#009688" stroke-width="1.5"/>
+<text x="270" y="254" text-anchor="middle" font-size="14" font-weight="600" fill="#009688">FastAPI (api-dev :5050)</text>
+<text x="270" y="274" text-anchor="middle" font-size="11" fill="#8b949e">路由 · 认证 · 智能体编排 · 知识库 · 评估</text>
+<rect x="480" y="230" width="300" height="60" rx="8" fill="#1f1620" stroke="#ab47bc" stroke-width="1.5"/>
+<text x="630" y="254" text-anchor="middle" font-size="14" font-weight="600" fill="#ab47bc">ARQ Worker (worker-dev)</text>
+<text x="630" y="274" text-anchor="middle" font-size="11" fill="#8b949e">LangGraph 运行 · 异步任务 · 事件流</text>
+<rect x="310" y="330" width="260" height="50" rx="8" fill="#1f1910" stroke="#ff9800" stroke-width="1.5"/>
+<text x="440" y="354" text-anchor="middle" font-size="14" font-weight="600" fill="#ff9800">Sandbox Provisioner</text>
+<text x="440" y="374" text-anchor="middle" font-size="11" fill="#8b949e">Docker / K8s 沙盒</text>
+<text x="440" y="420" text-anchor="middle" font-size="13" font-weight="600" fill="#2196f3">数据与存储层</text>
+<rect x="40" y="430" width="150" height="60" rx="8" fill="#0d1622" stroke="#2196f3" stroke-width="1.5"/>
+<text x="115" y="454" text-anchor="middle" font-size="14" font-weight="600" fill="#2196f3">PostgreSQL</text>
+<text x="115" y="474" text-anchor="middle" font-size="11" fill="#8b949e">业务数据</text>
+<text x="115" y="490" text-anchor="middle" font-size="11" fill="#8b949e">LangGraph Checkpoint</text>
+<rect x="210" y="430" width="130" height="60" rx="8" fill="#0d1622" stroke="#2196f3" stroke-width="1.5"/>
+<text x="275" y="454" text-anchor="middle" font-size="14" font-weight="600" fill="#2196f3">Redis</text>
+<text x="275" y="474" text-anchor="middle" font-size="11" fill="#8b949e">事件流</text>
+<text x="275" y="490" text-anchor="middle" font-size="11" fill="#8b949e">队列 · 缓存</text>
+<rect x="360" y="430" width="130" height="60" rx="8" fill="#0d1622" stroke="#2196f3" stroke-width="1.5"/>
+<text x="425" y="454" text-anchor="middle" font-size="14" font-weight="600" fill="#2196f3">Milvus</text>
+<text x="425" y="474" text-anchor="middle" font-size="11" fill="#8b949e">向量检索</text>
+<text x="425" y="490" text-anchor="middle" font-size="11" fill="#8b949e">RAG</text>
+<rect x="510" y="430" width="130" height="60" rx="8" fill="#0d1622" stroke="#2196f3" stroke-width="1.5"/>
+<text x="575" y="454" text-anchor="middle" font-size="14" font-weight="600" fill="#2196f3">MinIO</text>
+<text x="575" y="474" text-anchor="middle" font-size="11" fill="#8b949e">对象存储</text>
+<text x="575" y="490" text-anchor="middle" font-size="11" fill="#8b949e">文档文件</text>
+<rect x="660" y="430" width="170" height="60" rx="8" fill="#0d1622" stroke="#2196f3" stroke-width="1.5"/>
+<text x="745" y="454" text-anchor="middle" font-size="14" font-weight="600" fill="#2196f3">Neo4j</text>
+<text x="745" y="474" text-anchor="middle" font-size="11" fill="#8b949e">知识图谱</text>
+<text x="745" y="490" text-anchor="middle" font-size="11" fill="#8b949e">实体关系</text>
+<text x="440" y="540" text-anchor="middle" font-size="13" font-weight="600" fill="#607d8b">外部服务</text>
+<rect x="260" y="550" width="180" height="50" rx="8" fill="#10161c" stroke="#607d8b" stroke-width="1.5"/>
+<text x="350" y="574" text-anchor="middle" font-size="14" font-weight="600" fill="#607d8b">LLM API</text>
+<text x="350" y="594" text-anchor="middle" font-size="11" fill="#8b949e">DeepSeek · SiliconFlow · OpenAI 兼容</text>
+<rect x="460" y="550" width="200" height="50" rx="8" fill="#10161c" stroke="#607d8b" stroke-width="1.5"/>
+<text x="560" y="574" text-anchor="middle" font-size="14" font-weight="600" fill="#607d8b">Embedding / OCR</text>
+<text x="560" y="594" text-anchor="middle" font-size="11" fill="#8b949e">BAAI/bge-m3 · MinerU · PaddleOCR</text>
+<defs><marker id="ah-440100440130" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#58a6ff"/></marker></defs>
+<line x1="440" y1="100" x2="440" y2="130" stroke="#58a6ff" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah-440100440130)"/>
+<text x="444" y="111" font-size="10" fill="#8b949e">HTTP / SSE</text>
+<defs><marker id="ah-440190270230" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#58a6ff"/></marker></defs>
+<line x1="440" y1="190" x2="270" y2="230" stroke="#58a6ff" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah-440190270230)"/>
+<text x="359" y="206" font-size="10" fill="#8b949e">/api</text>
+<defs><marker id="ah-440190630230" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#58a6ff"/></marker></defs>
+<line x1="440" y1="190" x2="630" y2="230" stroke="#58a6ff" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah-440190630230)"/>
+<text x="539" y="206" font-size="10" fill="#8b949e">SSE 事件</text>
+<defs><marker id="ah-440260440330" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#58a6ff"/></marker></defs>
+<line x1="440" y1="260" x2="440" y2="330" stroke="#58a6ff" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah-440260440330)"/>
+<text x="444" y="291" font-size="10" fill="#8b949e">工具执行</text>
+<defs><marker id="ah-270290115430" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#58a6ff"/></marker></defs>
+<line x1="270" y1="290" x2="115" y2="430" stroke="#58a6ff" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah-270290115430)"/>
+<defs><marker id="ah-270290275430" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#58a6ff"/></marker></defs>
+<line x1="270" y1="290" x2="275" y2="430" stroke="#58a6ff" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah-270290275430)"/>
+<defs><marker id="ah-270290425430" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#58a6ff"/></marker></defs>
+<line x1="270" y1="290" x2="425" y2="430" stroke="#58a6ff" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah-270290425430)"/>
+<defs><marker id="ah-270290575430" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#58a6ff"/></marker></defs>
+<line x1="270" y1="290" x2="575" y2="430" stroke="#58a6ff" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah-270290575430)"/>
+<defs><marker id="ah-630290745430" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#58a6ff"/></marker></defs>
+<line x1="630" y1="290" x2="745" y2="430" stroke="#58a6ff" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah-630290745430)"/>
+<defs><marker id="ah-630290275430" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#58a6ff"/></marker></defs>
+<line x1="630" y1="290" x2="275" y2="430" stroke="#58a6ff" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah-630290275430)"/>
+<defs><marker id="ah-350360350550" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#58a6ff"/></marker></defs>
+<line x1="350" y1="360" x2="350" y2="550" stroke="#58a6ff" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah-350360350550)"/>
+<text x="354" y="451" font-size="10" fill="#8b949e">LLM 调用</text>
+<defs><marker id="ah-530360560550" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#58a6ff"/></marker></defs>
+<line x1="530" y1="360" x2="560" y2="550" stroke="#58a6ff" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah-530360560550)"/>
+<text x="549" y="451" font-size="10" fill="#8b949e">Embedding</text>
+<rect x="140" y="625" width="12" height="12" rx="2" fill="#42b883"/>
+<text x="158" y="635" font-size="11" fill="#8b949e">前端</text>
+<rect x="260" y="625" width="12" height="12" rx="2" fill="#009688"/>
+<text x="278" y="635" font-size="11" fill="#8b949e">后端 API</text>
+<rect x="380" y="625" width="12" height="12" rx="2" fill="#ab47bc"/>
+<text x="398" y="635" font-size="11" fill="#8b949e">异步 Worker</text>
+<rect x="500" y="625" width="12" height="12" rx="2" fill="#ff9800"/>
+<text x="518" y="635" font-size="11" fill="#8b949e">沙盒</text>
+<rect x="620" y="625" width="12" height="12" rx="2" fill="#2196f3"/>
+<text x="638" y="635" font-size="11" fill="#8b949e">数据层</text>
+<rect x="740" y="625" width="12" height="12" rx="2" fill="#607d8b"/>
+<text x="758" y="635" font-size="11" fill="#8b949e">外部服务</text>
+        </svg>

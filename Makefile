@@ -1,5 +1,5 @@
 
-.PHONY: up up-lite down logs lint format seed reset
+.PHONY: up up-lite down logs lint format test test-unit test-integration test-e2e seed reset
 
 PYTEST_ARGS ?=
 BACKEND_PYTHON ?= $(shell cat backend/.python-version)
@@ -46,9 +46,30 @@ seed:
 # LINTING AND FORMATTING
 ######################
 
+lint:
+	cd backend && UV_PYTHON=$(BACKEND_PYTHON) uv run ruff check package
+	cd backend && UV_PYTHON=$(BACKEND_PYTHON) uv run ruff check --select I package
+	cd web && pnpm run lint
+
 format:
 	cd backend && UV_PYTHON=$(BACKEND_PYTHON) uv run ruff format package
 	cd backend && UV_PYTHON=$(BACKEND_PYTHON) uv run ruff check package --fix
 	cd backend && UV_PYTHON=$(BACKEND_PYTHON) uv run ruff check --select I package --fix
 	cd web && pnpm run format
 	cd web && pnpm run lint
+
+######################
+# TESTING
+######################
+
+test:
+	docker compose exec api uv run --group test pytest test $(PYTEST_ARGS)
+
+test-unit:
+	docker compose exec api uv run --group test pytest test/unit -m "not slow" $(PYTEST_ARGS)
+
+test-integration:
+	docker compose exec api uv run --group test pytest test/integration $(PYTEST_ARGS)
+
+test-e2e:
+	docker compose exec api uv run --group test pytest test/e2e -m e2e $(PYTEST_ARGS)

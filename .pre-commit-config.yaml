@@ -1,0 +1,40 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  # 通用文件规范
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: '\.md$'
+      - id: end-of-file-fixer
+        exclude: '\.min\.(js|css)$'
+      - id: check-yaml
+        exclude: 'docker/|docs/'
+      - id: check-toml
+      - id: check-json
+        exclude: '\.vscode/|docs/'
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: ['--maxkb=512']
+        exclude: '\.uploads/|docker/volumes/'
+
+  # Python 代码检查与格式化
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.12.1
+    hooks:
+      - id: ruff
+        args: ['--fix']
+        files: '^backend/(package|server|scripts)/.*\.py$'
+      - id: ruff-format
+        files: '^backend/(package|server|scripts)/.*\.py$'
+
+  # 前端代码检查
+  - repo: local
+    hooks:
+      - id: eslint
+        name: eslint
+        entry: bash -c 'cd web && pnpm run lint'
+        language: system
+        files: '^web/src/.*\.(js|vue)$'
+        pass_filenames: false

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>银发守护 — 项目全景观览</title>
+  <link rel="icon" href="web/public/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="project_overview/styles/base.css">
+  <link rel="stylesheet" href="project_overview/styles/layout.css">
+  <link rel="stylesheet" href="project_overview/styles/components.css">
+</head>
+<body>
+
+<!-- ════════ 导航栏 ════════ -->
+<nav class="top-nav">
+  <div class="top-nav__brand">
+    <span class="top-nav__brand-dot"></span>
+    <span>银发守护</span>
+    <span style="color:var(--text-dim);font-size:0.75rem;font-weight:400">Overview</span>
+  </div>
+  <div class="top-nav__links">
+    <a class="top-nav__link" href="#hero">概览</a>
+    <a class="top-nav__link" href="#features">功能</a>
+    <a class="top-nav__link" href="#skills">技能</a>
+    <a class="top-nav__link" href="#tech">技术栈</a>
+    <a class="top-nav__link" href="#structure">结构</a>
+    <a class="top-nav__link" href="#dev">开发</a>
+    <a class="top-nav__link" href="#versions">版本</a>
+  </div>
+  <div class="top-nav__actions">
+    <button class="theme-toggle" id="theme-toggle" title="切换主题"></button>
+    <a class="btn btn--ghost" href="https://github.com/LPK3215/silver-guardian-v2" target="_blank" style="padding:0.5rem 1rem;font-size:0.8rem">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2 0 1.9 1.2 1.9 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.2.5-2.3 1.3-3.1-.2-.4-.6-1.6 0-3.2 0 0 1-.3 3.4 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.7 1.6.2 2.8.1 3.2.8.8 1.3 1.9 1.3 3.1 0 4.6-2.8 5.7-5.5 6 .5.4.8 1.1.8 2.2v3.3c0 .3.1.7.8.6A12 12 0 0 0 12 .3"/></svg>
+      GitHub
+    </a>
+  </div>
+</nav>
+
+<!-- ════════ Hero ════════ -->
+<section class="hero anchor" id="hero" data-section="hero">
+  <div class="hero__content">
+    <div class="hero__tag">
+      <span class="hero__tag-dot"></span>
+      基于 Yuxi 平台 · v0.7.1
+    </div>
+    <h1 class="hero__title">银发守护</h1>
+    <p class="hero__subtitle">智慧养老 AI 助手 — 用 AI 守护每一位长者的晚年生活<br>融合 RAG 技术、知识图谱与适老化交互设计</p>
+    <div class="hero__badges" id="hero-badges"></div>
+    <div class="hero__actions">
+      <a class="btn btn--primary" href="#features">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        探索功能
+      </a>
+      <a class="btn btn--ghost" href="#structure">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg>
+        项目结构
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 统计 ════════ -->
+<div class="container">
+  <div class="stats" id="stats"></div>
+</div>
+
+<!-- ════════ 核心功能 ════════ -->
+<section class="section anchor" id="features" data-section="features">
+  <div class="container">
+    <h2 class="section-title">核心功能</h2>
+    <p class="section-desc">四大功能支柱，覆盖养老场景的全链路 AI 交互</p>
+    <div class="grid grid-2" id="features-grid"></div>
+  </div>
+</section>
+
+<!-- ════════ 内置技能 ════════ -->
+<section class="section anchor" id="skills" data-section="skills">
+  <div class="container">
+    <h2 class="section-title">内置技能</h2>
+    <p class="section-desc">6 个 Skills 模块，覆盖评估、护理、研究、知识库、图片生成与报表</p>
+    <div class="grid grid-3" id="skills-list"></div>
+  </div>
+</section>
+
+<!-- ════════ 技术栈 ════════ -->
+<section class="section anchor" id="tech" data-section="tech">
+  <div class="container">
+    <h2 class="section-title">技术栈</h2>
+    <p class="section-desc">前后端分离 + 微服务基础设施，全 Docker Compose 编排</p>
+    <div class="card" id="tech-stack"></div>
+  </div>
+</section>
+
+<!-- ════════ 项目结构 ════════ -->
+<section class="section anchor" id="structure" data-section="structure">
+  <div class="container">
+    <h2 class="section-title">项目结构</h2>
+    <p class="section-desc">后端 server/package 双边界 + 前端 Vue 3 SPA</p>
+    <div class="tree" id="structure-tree"></div>
+  </div>
+</section>
+
+<!-- ════════ 开发命令 ════════ -->
+<section class="section anchor" id="dev" data-section="dev">
+  <div class="container">
+    <h2 class="section-title">开发命令</h2>
+    <p class="section-desc">通过 Makefile 统一入口，覆盖启动、格式化、测试、数据管理</p>
+    <div id="commands"></div>
+  </div>
+</section>
+
+<!-- ════════ 版本历史 ════════ -->
+<section class="section anchor" id="versions" data-section="versions">
+  <div class="container">
+    <h2 class="section-title">版本历史</h2>
+    <p class="section-desc">从项目初始化到当前版本的演进历程</p>
+    <div class="timeline" id="timeline"></div>
+  </div>
+</section>
+
+<!-- ════════ 页脚 ════════ -->
+<footer class="footer">
+  <div class="container">
+    <p>
+      <strong>银发守护</strong> · MIT License · Copyright © 2025-present
+      <a href="https://github.com/LPK3215" target="_blank">LPK3215</a> and contributors
+    </p>
+    <p style="margin-top:0.5rem">
+      基于 <a href="https://github.com/LPK3215/silver-guardian-v2" target="_blank">Yuxi</a> 智能知识库与知识图谱平台构建
+    </p>
+  </div>
+</footer>
+
+<!-- ════════ 脚本 ════════ -->
+<script src="project_overview/scripts/data.js"></script>
+<script src="project_overview/scripts/main.js"></script>
+</body>
+</html>

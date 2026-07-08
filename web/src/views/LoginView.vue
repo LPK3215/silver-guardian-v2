@@ -215,33 +215,6 @@
                     </a-button>
                   </a-form-item>
                 </a-form>
-
-                <!-- OIDC 登录选项  -->
-                <div v-if="oidcChecking || oidcEnabled" class="third-party-login">
-                  <div class="divider">
-                    <span>或使用以下方式登录</span>
-                  </div>
-                  <div class="login-icons">
-                    <!-- 检查中显示骨架屏 -->
-                    <div v-if="oidcChecking" class="login-skeleton">
-                      <a-skeleton-button block size="large" :active="true" />
-                    </div>
-                    <!-- 检查完成后显示按钮 -->
-                    <a-button
-                      v-else
-                      type="default"
-                      size="large"
-                      block
-                      :loading="oidcLoading"
-                      @click="handleOIDCLogin"
-                    >
-                      <template #icon>
-                        <key-icon size="18" />
-                      </template>
-                      {{ oidcButtonText }}
-                    </a-button>
-                  </div>
-                </div>
               </div>
 
               <!-- 错误提示 -->
@@ -257,9 +230,7 @@
     <!-- 页面底部：版权信息等 -->
     <footer class="page-footer">
       <div class="footer-links">
-        <a href="/" target="_blank">联系我们</a>
-        <span class="divider">|</span>
-        <a href="/" target="_blank">使用帮助</a>
+        <router-link to="/help">使用帮助</router-link>
       </div>
       <div class="copyright">
         &copy; {{ new Date().getFullYear() }} {{ brandName }}. All Rights Reserved.
@@ -276,14 +247,12 @@ import { useInfoStore } from '@/stores/info'
 import { useAgentStore } from '@/stores/agent'
 import { message } from 'ant-design-vue'
 import { healthApi } from '@/apis/system_api'
-import { authApi } from '@/apis/auth_api'
 import {
   User as UserIcon,
   Lock as LockIcon,
-  Key as KeyIcon,
   AlertCircle as ExclamationCircleIcon
 } from 'lucide-vue-next'
-import { tryAutoStartOIDC, sanitizeRedirect } from '@/utils/oidcAutoStart'
+import { sanitizeRedirect } from '@/utils/oidcAutoStart'
 
 const router = useRouter()
 const route = useRoute()
@@ -329,12 +298,6 @@ const agreementAccepted = ref(false)
 const serverStatus = ref('loading')
 const serverError = ref('')
 const healthChecking = ref(false)
-
-// OIDC 相关状态
-const oidcEnabled = ref(false)
-const oidcLoading = ref(false)
-const oidcChecking = ref(true)
-const oidcButtonText = ref('OIDC 登录')
 
 // 登录锁定相关状态
 const isLocked = ref(false)
@@ -500,56 +463,6 @@ const handleLogin = async () => {
   }
 }
 
-// 处理 OIDC 登录
-const handleOIDCLogin = async () => {
-  if (!ensureAgreementAccepted()) {
-    return
-  }
-
-  try {
-    oidcLoading.value = true
-    errorMessage.value = ''
-
-    // 获取 OIDC 登录 URL
-    const response = await authApi.getOIDCLoginUrl()
-    if (response.login_url) {
-      // 保存当前路径，以便登录后返回
-      const redirectPath =
-        sessionStorage.getItem('redirect') || router.currentRoute.value.query.redirect || '/'
-      sessionStorage.setItem('oidc_redirect', redirectPath)
-
-      // 跳转到 OIDC Provider
-      window.location.href = response.login_url
-    } else {
-      errorMessage.value = '获取 OIDC 登录地址失败'
-    }
-  } catch (error) {
-    console.error('OIDC 登录失败:', error)
-    errorMessage.value = error.message || 'OIDC 登录失败，请重试'
-  } finally {
-    oidcLoading.value = false
-  }
-}
-
-// 检查 OIDC 配置
-const checkOIDCConfig = async () => {
-  oidcChecking.value = true
-  try {
-    const config = await authApi.getOIDCConfig()
-    oidcEnabled.value = config.enabled
-    if (config.provider_name) {
-      oidcButtonText.value = config.provider_name
-    }
-    return config
-  } catch (error) {
-    console.error('检查 OIDC 配置失败:', error)
-    oidcEnabled.value = false
-    return null
-  } finally {
-    oidcChecking.value = false
-  }
-}
-
 // 处理初始化管理员
 const handleInitialize = async () => {
   if (!ensureAgreementAccepted()) {
@@ -623,29 +536,11 @@ onMounted(async () => {
     return
   }
 
-  // 显示 OIDC 认证失败的错误信息（由后端重定向携带）
-  if (route.query.oidc_error) {
-    errorMessage.value = String(route.query.oidc_error)
-  }
-
   // 首先检查服务器健康状态
   await checkServerHealth()
 
   // 检查是否是首次运行
   await checkFirstRunStatus()
-
-  // 如果处于首次运行状态，不需要 OIDC 自动登录
-  if (isFirstRun.value) {
-    return
-  }
-
-  // 检查 OIDC 配置完成后，尝试自动触发 OIDC 登录（跨系统跳转场景）
-  const config = await checkOIDCConfig()
-  if (config && config.enabled) {
-    const autoStarted = await tryAutoStartOIDC(async () => await authApi.getOIDCLoginUrl(), config)
-    // 如果已发起 OIDC 跳转，页面会被重定向，不需要继续
-    if (autoStarted) return
-  }
 })
 
 // 组件卸载时清理定时器
@@ -838,68 +733,6 @@ onUnmounted(() => {
   margin-bottom: 14px;
 }
 
-.third-party-login {
-  margin-top: 16px;
-  .divider {
-    position: relative;
-    text-align: center;
-    margin: 24px 0 16px;
-    &::before,
-    &::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      width: 30%;
-      height: 1px;
-      background-color: var(--gray-200);
-    }
-    &::before {
-      left: 0;
-    }
-    &::after {
-      right: 0;
-    }
-    span {
-      display: inline-block;
-      padding: 0 8px;
-      background-color: var(--gray-0);
-      color: var(--gray-400);
-      font-size: 12px;
-    }
-  }
-
-  .login-icons {
-    :deep(.ant-btn) {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      border-color: var(--gray-300);
-      color: var(--gray-700);
-
-      &:hover {
-        border-color: var(--main-color);
-        color: var(--main-color);
-        background-color: var(--main-10);
-      }
-
-      .anticon,
-      svg {
-        color: var(--main-color);
-      }
-    }
-  }
-
-  /* 修复：添加骨架屏样式 */
-  .login-skeleton {
-    :deep(.ant-skeleton-button) {
-      width: 100% !important;
-      height: 44px;
-      border-radius: 8px;
-    }
-  }
-}
-
 .agreement-form-item {
   margin-bottom: 12px;
 }
@@ -957,11 +790,6 @@ onUnmounted(() => {
     &:hover {
       color: var(--main-color);
     }
-  }
-
-  .divider {
-    color: var(--gray-300);
-    font-size: 12px;
   }
 }
 
@@ -1051,5 +879,17 @@ onUnmounted(() => {
   .card-side.is-form {
     padding: 40px 20px;
   }
+}
+</style>
+
+<style lang="less">
+/* Dark mode adjustments (unscoped for :root selector) */
+:root.dark .login-card {
+  border: 1px solid var(--gray-100);
+  box-shadow: 0 0 60px rgba(255, 255, 255, 0.03);
+}
+
+:root.dark .card-side.is-image .login-bg-image {
+  opacity: 0.55;
 }
 </style>

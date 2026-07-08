@@ -155,7 +155,7 @@
           需要了解评估基准生成原理？查看
           <a
             class="benchmark-help-link"
-            href="/"
+            href="/help"
             target="_blank"
             rel="noopener noreferrer"
           >

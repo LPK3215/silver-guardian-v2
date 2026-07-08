@@ -28,6 +28,12 @@ const router = createRouter({
       meta: { requiresAuth: false }
     },
     {
+      path: '/help',
+      name: 'help',
+      component: () => import('../views/HelpView.vue'),
+      meta: { requiresAuth: false }
+    },
+    {
       path: '/auth/oidc/callback', // oidc登录回调页面
       name: 'OIDCCallback',
       component: () => import('@/views/OIDCCallbackView.vue'),

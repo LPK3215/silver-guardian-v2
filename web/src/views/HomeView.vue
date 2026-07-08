@@ -11,7 +11,7 @@
       <a-result status="error" :title="error.title" :sub-title="error.message">
         <template #extra>
           <a-button type="primary" @click="retryLoad">重试</a-button>
-          <a-button :href="faqUrl" target="_blank" rel="noopener noreferrer">常见问题</a-button>
+          <a-button href="/help" target="_blank" rel="noopener noreferrer">常见问题</a-button>
         </template>
       </a-result>
     </div>
@@ -56,7 +56,7 @@
               </button>
               <a
                 class="button-base secondary"
-                href="/"
+                href="/help"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -148,6 +148,25 @@
                 <p class="flow-caption">智能体发起检索 · 引擎融合向量与图谱 · 召回知识增强生成</p>
               </div>
 
+              <div class="stat-row" v-if="publicStats">
+                <div class="stat-item">
+                  <span class="stat-item-value">{{ publicStats.agents }}</span>
+                  <span class="stat-item-label">智能体</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-item-value">{{ publicStats.conversations }}</span>
+                  <span class="stat-item-label">对话</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-item-value">{{ publicStats.knowledge_bases }}</span>
+                  <span class="stat-item-label">知识库</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-item-value">{{ publicStats.users }}</span>
+                  <span class="stat-item-label">用户</span>
+                </div>
+              </div>
+
             </div>
           </aside>
         </div>
@@ -182,11 +201,11 @@ import {
 const router = useRouter()
 const userStore = useUserStore()
 const infoStore = useInfoStore()
-const faqUrl = 'https://github.com/LPK3215/silver-guardian-v2#faq'
 
 // 加载状态
 const isLoading = ref(true)
 const error = ref(null)
+const publicStats = ref(null)
 let subtitleTimer = null
 
 const subtitleIndex = ref(0)
@@ -253,6 +272,12 @@ const loadData = async () => {
     // 健康检查通过后加载配置
     await infoStore.loadInfoConfig()
     startSubtitleCarousel()
+    try {
+      const stats = await healthApi.getPublicStats()
+      publicStats.value = stats
+    } catch {
+      // 统计获取失败不影响首页加载
+    }
   } catch (e) {
     console.error('加载失败:', e)
     stopSubtitleCarousel()
@@ -732,6 +757,34 @@ onUnmounted(() => {
   font-size: 0.84rem;
   color: var(--gray-600);
   line-height: 1.5;
+}
+
+.stat-row {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--gray-200);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+
+  &-value {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--main-color);
+    line-height: 1.2;
+  }
+
+  &-label {
+    font-size: 0.72rem;
+    color: var(--gray-500);
+  }
 }
 
 // 页脚

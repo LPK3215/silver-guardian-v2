@@ -35,7 +35,12 @@
 - 统一开发部署为「后端+基础设施在 Docker、前端本地运行」模式：删除 `docker-compose.dev.yml`，`docker-compose.yml` 的 `web` 服务加 `profiles: [full]` 默认不启动前端容器；`dev.ps1` 简化为 `docker compose up -d` + 本地 `pnpm dev`；`.env` 中的 DB/Redis/MinIO 地址改为由 compose 自动注入 Docker 内部网络名。
 - 修复模型选择器下拉无法点击展开：`ModelSelectorComponent.vue` 触发元素上的 `@click.prevent.stop` 阻止了 Ant Design Vue `a-dropdown` 的 click trigger，移除 `.prevent.stop` 后下拉正常展开。
 - 修复适老化设置按钮不可见与字号调节失效：`elderly-friendly.css` 中 `.elderly-settings-btn` 的 `position: fixed` 被 Vue scoped 样式中的 `*[data-v-xxx] { position: relative }` 覆盖，加 `!important` 修复；对话页面字号硬编码 `18px !important` 导致 `ElderlySettingsModal` 的字号调节无效，改为 `var(--elderly-font-size, 18px) !important` 通过 CSS 变量动态控制；暗色模式下 `.message-text` 硬编码 `#1a1a1a` 导致文字不可见，改为 `var(--gray-1000)` 并新增 `.dark` 作用域覆盖。
-- 新增多色主题方案：在 `base.css` 中新增海蓝、翠绿、青碧三套 `--main-*` 色阶，通过 `data-color-scheme` 属性切换；`theme.js` 新增 `colorScheme` 状态与 `setColorScheme` 方法，同步更新 Ant Design `colorPrimary`；用户下拉菜单底部新增色点选择器，适老化设置弹窗新增色系卡片选择器；选择持久化到 `localStorage`。
+- 新增多色主题方案：在 `base.css` 中新增海蓝、翠绿、青碧三套 `--main-*` 色阶，通过 `data-color-scheme` 属性切换；`theme.js` 新增 `colorScheme` 状态与 `setColorScheme` 方法，同步更新 Ant Design `colorPrimary`；用户下拉菜单底部新增色点选择器，适老化设置弹窗新增色系卡片选择器；选择持久化到 `localStorage`。登录页暗色模式适配：卡片新增边框与微光阴影，背景图降低透明度以融入深色环境。
+- 首页右侧卡片新增实时统计：后端新增公开接口 `GET /api/system/public-stats`（无需认证），返回智能体、对话、知识库、用户四项聚合数字；首页右侧卡片底部以统计行形式展示。
+- 修复登录页 OIDC 闪烁问题：移除登录页第三方登录（OIDC）功能，包括模板、状态变量、函数、导入和样式，消除页面加载时"或使用以下方式登录"骨架屏的闪现。
+- 修复主题色系崩溃：`theme.js` 初始化时校验 `localStorage` 中 `color_scheme` 值是否在 `COLOR_SCHEMES` 中，无效值回退到 `amber`，避免 `COLOR_SCHEMES[undefined].primary` 运行时崩溃。
+- 修复所有死链接：新增应用内帮助页 `/help`（`HelpView.vue`），包含快速开始、智能体对话、知识库管理、个人设置和常见问题五个章节；首页"查看文档"、用户菜单"文档中心"和登录页"使用帮助"均指向该页面；移除登录页无效的"联系我们"链接。
+- 全面清理死链接与死代码：修复评估基准上传/生成弹窗中"使用说明"链接指向首页的问题，改为指向 `/help`；修复首页错误页"常见问题"按钮指向不存在的 GitHub #faq 锚点，改为指向 `/help`；修复 `RAGEvaluationTab.vue` 中 `href=""` 空链接导致的浏览器导航异常；移除 `AppLayout.vue` 侧边栏中 `v-if="false"` 隐藏的 GitHub 入口死代码及其关联的 `GithubOutlined` 导入、`githubStars`/`isLoadingStars` 状态变量和全部 `.github`/`.github-link`/`.github-stars` CSS 样式。
 - 隐藏首页 GitHub 按钮并更新仓库地址：首页 header 中的 GitHub 图标加 `v-if="false"` 隐藏，侧边栏 GitHub 入口保持隐藏，所有仓库 URL 统一更新为 `https://github.com/LPK3215/silver-guardian-v2`。
 - 移除设置弹窗中的"支持项目/给 Yuxi 点个 Star"卡片：删除 `SettingsModal.vue` 中的 Star 卡片模板、相关状态变量（`showStarCard`、`STAR_CARD_STORAGE_KEY`、`projectRepoUrl`、`dismissStarCard`）、无用 import（`Star`、`ExternalLink`、`onMounted`）和全部 star-card CSS 样式。
 - 收敛 API Key 生成逻辑：移除独立 API Key 生成服务，统一通过 `AuthUtils.generate_api_key()` 生成 CLI 授权与用户管理中的 API Key。

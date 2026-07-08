@@ -152,7 +152,7 @@ const goToLogin = () => {
 }
 
 const openDocs = () => {
-  window.open('/', '_blank', 'noopener,noreferrer')
+  window.open('/help', '_blank', 'noopener,noreferrer')
 }
 
 const toggleTheme = () => {

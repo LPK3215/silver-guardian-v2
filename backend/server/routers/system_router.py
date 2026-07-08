@@ -4,11 +4,12 @@ from pathlib import Path
 import aiofiles
 import yaml
 from fastapi import APIRouter, Body, Depends, HTTPException
+from sqlalchemy import func, select
 from yuxi import config, get_version
 from yuxi.storage.postgres.models_business import User
 from yuxi.utils.logging_config import logger
 
-from server.utils.auth_middleware import get_admin_user, get_required_user
+from server.utils.auth_middleware import get_admin_user, get_db, get_required_user
 
 system = APIRouter(prefix="/system", tags=["system"])
 
@@ -21,6 +22,31 @@ system = APIRouter(prefix="/system", tags=["system"])
 async def health_check():
     """系统健康检查接口（公开接口）"""
     return {"status": "ok", "message": "服务正常运行", "version": get_version()}
+
+
+@system.get("/public-stats")
+async def public_stats(db=Depends(get_db)):
+    """首页公开统计数据（无需认证，仅返回聚合数字）"""
+    from yuxi.storage.postgres.models_business import Agent, Conversation, User
+    from yuxi.storage.postgres.models_knowledge import KnowledgeBase
+
+    try:
+        total_users = await db.scalar(
+            select(func.count(User.id)).filter(User.is_deleted == 0)
+        )
+        total_agents = await db.scalar(select(func.count(Agent.id)))
+        total_conversations = await db.scalar(select(func.count(Conversation.id)))
+        total_kbs = await db.scalar(select(func.count(KnowledgeBase.id)))
+
+        return {
+            "users": total_users or 0,
+            "agents": total_agents or 0,
+            "conversations": total_conversations or 0,
+            "knowledge_bases": total_kbs or 0,
+        }
+    except Exception as e:
+        logger.error(f"获取公开统计失败: {e}")
+        return {"users": 0, "agents": 0, "conversations": 0, "knowledge_bases": 0}
 
 
 @system.get("/discovery")

@@ -14,7 +14,12 @@ export const healthApi = {
    * 系统健康检查（公开接口）
    * @returns {Promise} - 健康检查结果
    */
-  checkHealth: () => apiGet('/api/system/health', {}, false)
+  checkHealth: () => apiGet('/api/system/health', {}, false),
+
+  /**
+   * 首页公开统计数据（无需认证）
+   */
+  getPublicStats: () => apiGet('/api/system/public-stats', {}, false)
 }
 
 // =============================================================================

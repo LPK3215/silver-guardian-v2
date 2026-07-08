@@ -41,7 +41,7 @@
           需要了解评估基准格式？查看
           <a
             class="benchmark-help-link"
-            href="/"
+            href="/help"
             target="_blank"
             rel="noopener noreferrer"
           >

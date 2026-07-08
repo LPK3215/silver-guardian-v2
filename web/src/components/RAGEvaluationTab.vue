@@ -226,7 +226,7 @@
                 <a-space>
                   <a
                     v-if="record.status === 'completed'"
-                    href=""
+                    href="#"
                     class="history-action-link"
                     @click.prevent="viewResults(record.run_id)"
                   >
@@ -240,7 +240,7 @@
                     cancel-text="取消"
                   >
                     <a
-                      href=""
+                      href="#"
                       class="history-action-link history-action-link-danger"
                       @click.prevent
                     >

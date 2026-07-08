@@ -13,7 +13,8 @@ export const COLOR_SCHEMES = {
 export const useThemeStore = defineStore('theme', () => {
   const savedTheme = localStorage.getItem('theme')
   const isDark = ref(savedTheme === 'dark')
-  const colorScheme = ref(localStorage.getItem('color_scheme') || 'amber')
+  const savedScheme = localStorage.getItem('color_scheme')
+  const colorScheme = ref(COLOR_SCHEMES[savedScheme] ? savedScheme : 'amber')
 
   // 公共主题配置
   const commonTheme = computed(() => ({

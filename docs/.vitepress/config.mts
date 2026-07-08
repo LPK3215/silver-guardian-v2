@@ -77,7 +77,7 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/xerrors/Yuxi' }
+      { icon: 'github', link: 'https://github.com/LPK3215/silver-guardian-v2' }
     ],
 
     footer: {
@@ -86,7 +86,7 @@ export default defineConfig({
     },
 
     editLink: {
-      pattern: 'https://github.com/xerrors/Yuxi/edit/main/docs/:path',
+      pattern: 'https://github.com/LPK3215/silver-guardian-v2/edit/main/docs/:path',
       text: '在 GitHub 上编辑此页'
     },
 

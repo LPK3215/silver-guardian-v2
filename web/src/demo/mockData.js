@@ -7,13 +7,18 @@
 
 // ========== 系统/品牌 ==========
 
+// 内联 SVG 用作 demo 模式 logo（避免 GitHub Pages 子目录路径问题）
+const DEMO_LOGO_SVG = 'data:image/svg+xml,' + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#f59e0b"/><text x="50" y="69" font-size="52" text-anchor="middle" fill="#fff" font-family="sans-serif" font-weight="bold">银</text></svg>'
+)
+
 const systemInfo = {
   success: true,
   data: {
     organization: {
       name: '银发守护',
-      logo: '/favicon.svg',
-      avatar: '/favicon.svg'
+      logo: DEMO_LOGO_SVG,
+      avatar: DEMO_LOGO_SVG
     },
     branding: {
       name: '银发守护 Silver Guardian',
@@ -601,6 +606,54 @@ function getMockReply(query) {
     return mockReplies[1]
   }
   return mockReplies[2]
+}
+
+// ========== Demo 动态消息存储 ==========
+// 存储用户在 Demo 中实际发送的消息及对应 AI 回复，按线程 ID 组织
+
+const demoThreadMessages = new Map()
+
+/**
+ * 向指定线程添加一条消息
+ * @param {string} threadId
+ * @param {{type: 'human'|'ai', content: string}} msg
+ */
+function addDemoMessage(threadId, msg) {
+  if (!demoThreadMessages.has(threadId)) {
+    demoThreadMessages.set(threadId, [])
+  }
+  const msgs = demoThreadMessages.get(threadId)
+  const newMsg = {
+    id: 9000 + msgs.length,
+    type: msg.type,
+    content: msg.content,
+    created_at: new Date().toISOString(),
+    run_id: msg.type === 'ai' ? 'demo-run-latest' : null,
+    request_id: msg.type === 'ai' ? 'demo-req-latest' : null,
+    delivery_status: 'delivered',
+    extra_metadata: {},
+    message_type: null,
+    image_content: null,
+    feedback: null
+  }
+  msgs.push(newMsg)
+  return newMsg
+}
+
+/**
+ * 获取指定线程的完整历史（静态 + 动态消息合并）
+ * @param {string} threadId
+ * @returns {{history: Array}}
+ */
+function getDemoHistory(threadId) {
+  // 静态历史
+  const staticMap = {
+    'demo-thread-1': chatHistory.history,
+    'demo-thread-2': threadHistory2.history
+  }
+  const staticMsgs = staticMap[threadId] || []
+  const dynamicMsgs = demoThreadMessages.get(threadId) || []
+  return { history: [...staticMsgs, ...dynamicMsgs] }
 }
 
 // ========== 导出路由表 ==========

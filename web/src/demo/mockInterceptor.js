@@ -5,7 +5,7 @@
  * 不修改任何现有业务代码。
  */
 
-import { mockRoutes } from './mockData'
+import { mockRoutes, addDemoMessage, getDemoHistory, getMockReply } from './mockData'
 
 function matchRoute(method, url) {
   // 去掉 query string
@@ -70,6 +70,27 @@ export function installMockInterceptor() {
     }
 
     const method = (options.method || 'GET').toUpperCase()
+
+    // 特殊处理 Agent Run SSE events，返回 ReadableStream 避免前端无限重连
+    if (method === 'GET' && urlString.includes('/api/agent/runs/') && urlString.includes('/events')) {
+      const runIdMatch = urlString.match(/\/api\/agent\/runs\/([^/?]+)/)
+      const runId = runIdMatch ? runIdMatch[1] : 'demo-run'
+      const encoder = new TextEncoder()
+      const sseData =
+        `event: end\ndata: ` +
+        JSON.stringify({ payload: { status: 'completed' }, run_id: runId }) +
+        `\n\n`
+      const stream = new ReadableStream({
+        start(controller) {
+          controller.enqueue(encoder.encode(sseData))
+          controller.close()
+        }
+      })
+      return new Response(stream, {
+        headers: { 'Content-Type': 'text/event-stream' }
+      })
+    }
+
     const match = matchRoute(method, urlString)
 
     if (match) {
@@ -90,7 +111,25 @@ export function installMockInterceptor() {
       // 模拟网络延迟
       await new Promise((r) => setTimeout(r, 200 + Math.random() * 300))
 
+      // 发送新消息时记录到 demo 动态历史，并生成模拟 AI 回复
+      if (method === 'POST' && urlString.includes('/api/agent/runs') && !urlString.includes('/events')) {
+        const query = body?.query
+        const threadId = body?.thread_id
+        if (query && threadId) {
+          addDemoMessage(threadId, { type: 'human', content: query })
+          addDemoMessage(threadId, { type: 'ai', content: getMockReply(query) })
+        }
+      }
+
       const result = match.handler(body, match.params)
+
+      // 历史消息接口返回静态 + 动态消息合并
+      const historyMatch = urlString.match(/\/api\/chat\/thread\/([^/]+)\/history$/)
+      if (method === 'GET' && historyMatch) {
+        const threadId = historyMatch[1]
+        return createMockResponse(getDemoHistory(threadId))
+      }
+
       return createMockResponse(result)
     }
 

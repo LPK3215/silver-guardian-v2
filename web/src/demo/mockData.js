@@ -656,6 +656,8 @@ function getDemoHistory(threadId) {
   return { history: [...staticMsgs, ...dynamicMsgs] }
 }
 
+export { addDemoMessage, getDemoHistory, getMockReply }
+
 // ========== 导出路由表 ==========
 
 export const mockRoutes = {

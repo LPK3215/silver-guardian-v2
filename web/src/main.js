@@ -10,6 +10,12 @@ import 'ant-design-vue/dist/reset.css'
 import '@/assets/css/main.css'
 import '@/assets/css/elderly-friendly.css'
 
+// Demo 模式：拦截 API 返回假数据
+if (import.meta.env.VITE_DEMO_MODE === 'true') {
+  const { installMockInterceptor } = await import('./demo/mockInterceptor')
+  installMockInterceptor()
+}
+
 const app = createApp(App)
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)

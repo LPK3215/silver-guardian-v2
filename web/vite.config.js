@@ -5,6 +5,8 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig(({ mode }) => {
   // eslint-disable-next-line no-undef
   const env = loadEnv(mode, process.cwd(), '')
+  const isDemo = mode === 'demo'
+
   return {
     plugins: [vue()],
     resolve: {
@@ -12,6 +14,13 @@ export default defineConfig(({ mode }) => {
         '@': fileURLToPath(new URL('./src', import.meta.url))
       }
     },
+    // Demo 模式部署到 GitHub Pages 的 /silver-guardian-v2/demo/ 路径下
+    base: isDemo ? '/silver-guardian-v2/demo/' : '/',
+    // Demo 模式输出到 docs/demo-dist 目录
+    build: isDemo ? {
+      outDir: '../docs/demo-dist',
+      emptyOutDir: true
+    } : undefined,
     server: {
       proxy: {
         '^/api': {

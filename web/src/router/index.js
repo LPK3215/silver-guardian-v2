@@ -161,6 +161,20 @@ const router = createRouter({
 
 // 全局前置守卫
 router.beforeEach(async (to) => {
+  // Demo 模式：自动注入 mock 用户状态，跳过登录
+  if (import.meta.env.VITE_DEMO_MODE === 'true') {
+    const userStore = useUserStore()
+    if (!userStore.isLoggedIn) {
+      userStore.token = 'demo-token'
+      userStore.userId = 1
+      userStore.username = 'admin'
+      userStore.uid = 'admin'
+      userStore.userRole = 'superadmin'
+      localStorage.setItem('user_token', 'demo-token')
+    }
+    return true
+  }
+
   // 检查路由是否需要认证
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth === true)
   const requiresAdmin = to.matched.some((record) => record.meta.requiresAdmin)

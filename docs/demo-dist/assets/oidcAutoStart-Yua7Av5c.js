@@ -1,0 +1,1 @@
+function e(e){return typeof e==`string`&&e.length>0&&e[0]===`/`&&e[1]!==`/`&&e[1]!==`\\`?e:`/`}function t(){sessionStorage.removeItem(`oidc_auto_start_attempted`)}export{e as n,t};

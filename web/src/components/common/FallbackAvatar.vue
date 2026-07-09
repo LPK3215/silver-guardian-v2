@@ -12,7 +12,7 @@
       :alt="resolvedAlt"
       @error="handleImageError"
     />
-    <span v-else class="fallback-avatar-text" aria-hidden="true">{{ initials }}</span>
+    <span v-else-if="initials" class="fallback-avatar-text" aria-hidden="true">{{ initials }}</span>
   </span>
 </template>
 

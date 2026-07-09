@@ -33,9 +33,8 @@ export const generatePixelAvatar = (id) => {
 }
 
 export const getAvatarInitials = (name, kind = 'user') => {
-  const fallback = kind === 'agent' ? '智能' : '用户'
   const normalizedName = String(name || '').trim()
-  if (!normalizedName) return fallback
+  if (!normalizedName) return ''
   return Array.from(normalizedName).slice(0, 2).join('')
 }
 

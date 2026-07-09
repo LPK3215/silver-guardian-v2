@@ -64,7 +64,7 @@ const userInfo = {
   username: 'admin',
   uid: 'admin',
   phone_number: '138****8888',
-  avatar: '',
+  avatar: '/silver-guardian-v2/demo/avatar.jpg',
   role: 'superadmin',
   department_id: 1,
   department_name: '管理部'

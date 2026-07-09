@@ -208,107 +208,156 @@ const agentBackends = {
 }
 
 // ========== 对话线程 ==========
+// 后端 response_model=list[ThreadResponse]，返回裸数组
+const threads = [
+  {
+    id: 'demo-thread-1',
+    uid: 'admin',
+    agent_id: 'default-chatbot',
+    title: '高龄津贴怎么申请？',
+    created_at: '2026-07-09T10:30:00Z',
+    updated_at: '2026-07-09T10:35:00Z',
+    is_pinned: false,
+    metadata: {}
+  },
+  {
+    id: 'demo-thread-2',
+    uid: 'admin',
+    agent_id: 'default-chatbot',
+    title: '高血压患者饮食注意事项',
+    created_at: '2026-07-08T14:20:00Z',
+    updated_at: '2026-07-08T14:30:00Z',
+    is_pinned: false,
+    metadata: {}
+  },
+  {
+    id: 'demo-thread-3',
+    uid: 'admin',
+    agent_id: 'default-chatbot',
+    title: '老年人防诈骗指南',
+    created_at: '2026-07-07T09:10:00Z',
+    updated_at: '2026-07-07T09:25:00Z',
+    is_pinned: true,
+    metadata: {}
+  },
+  {
+    id: 'demo-thread-4',
+    uid: 'admin',
+    agent_id: 'elderly-policy',
+    title: '老年人权益保障法咨询',
+    created_at: '2026-07-06T16:00:00Z',
+    updated_at: '2026-07-06T16:15:00Z',
+    is_pinned: false,
+    metadata: {}
+  },
+  {
+    id: 'demo-thread-5',
+    uid: 'admin',
+    agent_id: 'nursing-care',
+    title: '卧床老人护理操作要点',
+    created_at: '2026-07-05T11:00:00Z',
+    updated_at: '2026-07-05T11:30:00Z',
+    is_pinned: false,
+    metadata: {}
+  }
+]
 
-const threads = {
-  threads: [
-    {
-      thread_id: 'demo-thread-1',
-      agent_id: 'default-chatbot',
-      title: '高龄津贴怎么申请？',
-      created_at: '2026-07-09T10:30:00Z',
-      updated_at: '2026-07-09T10:35:00Z',
-      is_pinned: false
-    },
-    {
-      thread_id: 'demo-thread-2',
-      agent_id: 'default-chatbot',
-      title: '高血压患者饮食注意事项',
-      created_at: '2026-07-08T14:20:00Z',
-      updated_at: '2026-07-08T14:30:00Z',
-      is_pinned: false
-    },
-    {
-      thread_id: 'demo-thread-3',
-      agent_id: 'default-chatbot',
-      title: '老年人防诈骗指南',
-      created_at: '2026-07-07T09:10:00Z',
-      updated_at: '2026-07-07T09:25:00Z',
-      is_pinned: true
-    },
-    {
-      thread_id: 'demo-thread-4',
-      agent_id: 'elderly-policy',
-      title: '老年人权益保障法咨询',
-      created_at: '2026-07-06T16:00:00Z',
-      updated_at: '2026-07-06T16:15:00Z',
-      is_pinned: false
-    },
-    {
-      thread_id: 'demo-thread-5',
-      agent_id: 'nursing-care',
-      title: '卧床老人护理操作要点',
-      created_at: '2026-07-05T11:00:00Z',
-      updated_at: '2026-07-05T11:30:00Z',
-      is_pinned: false
-    }
-  ]
-}
-
+// 后端返回 { history: [...] }，消息用 type（human/ai）而非 role
 const chatHistory = {
-  messages: [
+  history: [
     {
-      message_id: 1,
-      thread_id: 'demo-thread-1',
-      role: 'user',
+      id: 1,
+      type: 'human',
       content: '高龄津贴怎么申请？',
-      created_at: '2026-07-09T10:30:00Z'
+      created_at: '2026-07-09T10:30:00Z',
+      run_id: null,
+      request_id: null,
+      delivery_status: 'delivered',
+      extra_metadata: {},
+      message_type: null,
+      image_content: null,
+      feedback: null
     },
     {
-      message_id: 2,
-      thread_id: 'demo-thread-1',
-      role: 'assistant',
+      id: 2,
+      type: 'ai',
       content: '## 高龄津贴申请指南\n\n根据《老年人权益保障法》相关规定，**国家鼓励地方建立八十周岁以上低收入老年人高龄津贴制度**。\n\n### 申请条件\n\n| 条件项 | 说明 |\n|---|---|\n| 年龄要求 | 通常年满 80 周岁（部分地区放宽至 70 或 75 周岁） |\n| 户籍要求 | 具有当地户籍 |\n\n### 申请材料\n\n1. 本人身份证（原件及复印件）\n2. 户口簿（原件及复印件）\n3. 近期免冠照片\n4. 本人名下银行卡\n5. 《高龄津贴申请表》\n\n### 申请流程\n\n- **线上申请**：打开当地政务服务 App，搜索"高龄津贴"按指引提交\n- **线下申请**：前往户籍所在地的社区居委会/村委会办理\n\n> 📖 以上内容引用自知识库文档《老年人权益保障法要点》第 42-43 条',
       created_at: '2026-07-09T10:30:30Z',
+      run_id: 'demo-run-1',
+      request_id: 'demo-req-1',
+      delivery_status: 'delivered',
+      extra_metadata: {},
+      message_type: null,
+      image_content: null,
+      feedback: null,
       tool_calls: [
         {
-          tool_name: 'query_kb',
-          tool_input: { query_text: '高龄津贴 申请' },
-          tool_output: '检索到 2 个相关片段，来自《老年人权益保障法要点》'
+          id: 'tc-1',
+          name: 'query_kb',
+          function: { name: 'query_kb' },
+          args: { query_text: '高龄津贴 申请' },
+          tool_call_result: { content: '检索到 2 个相关片段，来自《老年人权益保障法要点》' },
+          status: 'success',
+          error_message: null
         }
       ]
     },
     {
-      message_id: 3,
-      thread_id: 'demo-thread-1',
-      role: 'user',
+      id: 3,
+      type: 'human',
       content: '那津贴标准大概是多少？',
-      created_at: '2026-07-09T10:32:00Z'
+      created_at: '2026-07-09T10:32:00Z',
+      run_id: null,
+      request_id: null,
+      delivery_status: 'delivered',
+      extra_metadata: {},
+      message_type: null,
+      image_content: null,
+      feedback: null
     },
     {
-      message_id: 4,
-      thread_id: 'demo-thread-1',
-      role: 'assistant',
+      id: 4,
+      type: 'ai',
       content: '津贴标准因地而异，一般为每人每月 **50~500 元** 不等，按年龄段递增：\n\n| 年龄段 | 参考标准（月） |\n|---|---|\n| 80~89 岁 | 100~200 元 |\n| 90~99 岁 | 200~500 元 |\n| 100 岁及以上 | 300~1000 元 |\n\n> ⚠️ 以上为通用参考标准，具体金额请咨询当地民政部门。',
-      created_at: '2026-07-09T10:32:15Z'
+      created_at: '2026-07-09T10:32:15Z',
+      run_id: 'demo-run-2',
+      request_id: 'demo-req-2',
+      delivery_status: 'delivered',
+      extra_metadata: {},
+      message_type: null,
+      image_content: null,
+      feedback: null
     }
   ]
 }
 
 const threadHistory2 = {
-  messages: [
+  history: [
     {
-      message_id: 10,
-      thread_id: 'demo-thread-2',
-      role: 'user',
+      id: 10,
+      type: 'human',
       content: '高血压患者饮食要注意什么？',
-      created_at: '2026-07-08T14:20:00Z'
+      created_at: '2026-07-08T14:20:00Z',
+      run_id: null,
+      request_id: null,
+      delivery_status: 'delivered',
+      extra_metadata: {},
+      message_type: null,
+      image_content: null,
+      feedback: null
     },
     {
-      message_id: 11,
-      thread_id: 'demo-thread-2',
-      role: 'assistant',
+      id: 11,
+      type: 'ai',
       content: '## 高血压患者饮食建议\n\n根据《老年慢性病日常管理指南》，高血压患者应遵循以下饮食原则：\n\n### 核心原则\n\n1. **低盐饮食** — 每日食盐摄入不超过 5g\n2. **低脂饮食** — 减少动物脂肪摄入，选用植物油\n3. **高纤维** — 多吃蔬菜水果，每日不少于 500g\n4. **适量蛋白质** — 选择鱼、禽、豆制品等优质蛋白\n\n### 推荐食物\n\n- ✅ 芹菜、菠菜、西红柿\n- ✅ 燕麦、糙米\n- ✅ 鱼类（每周 2-3 次）\n\n### 限制食物\n\n- ❌ 腌制品、腊肉\n- ❌ 动物内脏\n- ❌ 浓茶、咖啡\n\n> 📖 内容引用自知识库文档《老年慢性病日常管理指南》',
-      created_at: '2026-07-08T14:20:30Z'
+      created_at: '2026-07-08T14:20:30Z',
+      run_id: 'demo-run-10',
+      request_id: 'demo-req-10',
+      delivery_status: 'delivered',
+      extra_metadata: {},
+      message_type: null,
+      image_content: null,
+      feedback: null
     }
   ]
 }
@@ -514,12 +563,14 @@ const workspaceTree = {
 function createThread(agentId, title) {
   const threadId = 'demo-thread-' + Date.now()
   return {
-    thread_id: threadId,
+    id: threadId,
+    uid: 'admin',
     agent_id: agentId,
     title: title || '新的对话',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
-    is_pinned: false
+    is_pinned: false,
+    metadata: {}
   }
 }
 
@@ -586,7 +637,7 @@ export const mockRoutes = {
   // 历史消息
   'GET /api/chat/thread/demo-thread-1/history': () => chatHistory,
   'GET /api/chat/thread/demo-thread-2/history': () => threadHistory2,
-  'GET /api/chat/thread/:threadId/history': () => ({ messages: [] }),
+  'GET /api/chat/thread/:threadId/history': () => ({ history: [] }),
   'GET /api/chat/thread/:threadId/state': () => ({ state: {} }),
   'GET /api/chat/thread/:threadId/attachments': () => ({ attachments: [] }),
   'GET /api/chat/thread/:threadId/files': () => ({ files: [] }),

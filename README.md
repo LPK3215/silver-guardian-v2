@@ -257,4 +257,14 @@ Copyright (c) 2025-present LPK3215 and contributors.
 
 ## 致谢
 
-感谢 [Yuxi](https://github.com/LPK3215/silver-guardian-v2) 开源社区提供的底层框架支持。
+感谢以下开源项目：
+
+- [Yuxi](https://github.com/xerrors/Yuxi) —— 智能知识库与知识图谱智能体框架
+- [LangGraph](https://github.com/langchain-ai/langgraph) —— 智能体编排框架
+- [FastAPI](https://github.com/fastapi/fastapi) —— 高性能 Web 框架
+- [Vue.js](https://github.com/vuejs/core) —— 前端渐进式框架
+- [LightRAG](https://github.com/HKUDS/LightRAG) —— 轻量级知识图谱检索增强生成
+
+
+
+

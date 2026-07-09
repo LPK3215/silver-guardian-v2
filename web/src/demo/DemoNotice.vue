@@ -33,7 +33,7 @@ function handleConfirm() {
     :mask-closable="false"
     :closable="false"
     :keyboard="false"
-    :width="520"
+    :width="560"
     :footer="null"
     centered
   >
@@ -41,20 +41,32 @@ function handleConfirm() {
       <div class="demo-notice-icon">
         <ExclamationCircleOutlined />
       </div>
-      <h2 class="demo-notice-title">在线体验模式</h2>
+      <h2 class="demo-notice-title">⚠️ 静态演示版本</h2>
       <div class="demo-notice-body">
         <p>您好！欢迎体验<strong>银发守护 Silver Guardian</strong>。</p>
-        <p>当前页面为<strong>静态演示版本</strong>，旨在展示产品界面和交互设计：</p>
-        <ul>
-          <li>界面中的对话内容、知识库数据均为<strong>预设示例</strong></li>
-          <li>不涉及任何真实的 AI 模型调用或后端服务</li>
-          <li>部分功能（如发送消息、上传文件）不可实际操作</li>
-        </ul>
-        <p class="demo-notice-hint">如需体验完整功能，请参照 Demo 帖中的 Docker 部署方式本地运行。</p>
+        <p>
+          当前页面为<strong class="demo-notice-strong">静态演示版本</strong>，由 GitHub Pages 部署，
+          旨在展示产品界面与交互设计，<strong>不涉及任何真实 AI 调用或后端服务</strong>。
+        </p>
+        <div class="demo-notice-keypoints">
+          <p class="demo-notice-keypoint">
+            <span class="demo-notice-bullet">①</span>
+            对话内容、知识库引用均为<strong>预设示例</strong>，非大模型实时生成
+          </p>
+          <p class="demo-notice-keypoint">
+            <span class="demo-notice-bullet">②</span>
+            每条 AI 回复顶部会出现<strong class="demo-notice-strong">「静态演示」橙色徽章</strong>，请注意识别
+          </p>
+          <p class="demo-notice-keypoint">
+            <span class="demo-notice-bullet">③</span>
+            问到预设未覆盖的问题时，会收到「演示数据未覆盖」的明确提示
+          </p>
+        </div>
+        <p class="demo-notice-hint">💡 如需体验完整功能，请参照 Demo 帖中的 Docker 部署方式本地运行（含 DeepSeek 大模型 + Milvus 知识库检索）。</p>
       </div>
       <div class="demo-notice-footer">
         <a-button type="primary" size="large" block @click="handleConfirm">
-          我已了解，开始体验
+          我已了解，进入演示
         </a-button>
       </div>
     </div>
@@ -112,5 +124,34 @@ function handleConfirm() {
 
 .demo-notice-footer {
   margin-top: 24px;
+}
+
+.demo-notice-strong {
+  color: #d4380d;
+  font-weight: 700;
+}
+
+.demo-notice-keypoints {
+  background: #fffbe6;
+  border: 1px solid #ffe58f;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 12px 0;
+}
+
+.demo-notice-keypoint {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 6px 0 !important;
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: #595959;
+}
+
+.demo-notice-bullet {
+  color: #fa8c16;
+  font-weight: 700;
+  flex-shrink: 0;
 }
 </style>

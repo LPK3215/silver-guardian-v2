@@ -591,6 +591,11 @@ function createRunResponse(data) {
   }
 }
 
+// 静态演示水印：放在 AI 回复最前面，让用户一眼识别这是预设示例
+const DEMO_WATERMARK =
+  '<div class="demo-watermark"><span class="demo-watermark-tag">静态演示</span>' +
+  '<span class="demo-watermark-text">以下为预设示例回复，非真实 AI 生成。完整功能请在本地部署后体验。</span></div>\n\n'
+
 // 模拟 AI 回复内容
 const mockReplies = [
   '根据《老年人权益保障法》相关规定，老年人享有以下权益：\n\n1. **赡养义务** — 子女应履行经济供养、生活照料和精神慰藉的义务\n2. **医疗保障** — 享受基本医疗保险待遇\n3. **高龄津贴** — 80 周岁以上低收入老人可申请高龄津贴\n4. **社会优待** — 乘坐公共交通、参观文化设施享受优待\n\n> 📖 以上内容引用自知识库文档《老年人权益保障法要点》',
@@ -598,14 +603,22 @@ const mockReplies = [
   '根据《老年人护理操作规范》，护理时应注意：\n\n### 操作要点\n\n- **体位变换** — 每 2 小时翻身一次，预防压疮\n- **口腔护理** — 每日早晚清洁口腔\n- **皮肤护理** — 保持皮肤清洁干燥\n- **饮食护理** — 少量多餐，注意进食安全\n- **康复训练** — 根据老人身体状况制定计划\n\n> 📖 内容引用自知识库文档《老年人护理操作规范》'
 ]
 
+// 未命中预设类别时的兜底回复
+const mockFallbackReply =
+  '### 🙋 演示数据暂未覆盖您的问题\n\n当前为 GitHub Pages 静态演示版本，仅内置了 **政策法规、慢病管理、护理操作** 三类问题的示例回复。\n\n**您可以尝试这些示例问题体验完整交互：**\n\n- 「高龄津贴怎么申请？」\n- 「高血压患者饮食要注意什么？」\n- 「卧床老人如何护理？」\n\n---\n\n💡 **想体验真实 AI 对话？** 请参照 [GitHub 仓库](https://github.com/LPK3215/silver-guardian-v2) 的 Docker 部署说明，在本地启动完整服务（含 DeepSeek 大模型 + Milvus 知识库检索）。'
+
 function getMockReply(query) {
+  // 命中具体类别才返回对应回复；未命中走兜底，不再"张冠李戴"
   if (query.includes('政策') || query.includes('权益') || query.includes('津贴')) {
-    return mockReplies[0]
+    return DEMO_WATERMARK + mockReplies[0]
   }
-  if (query.includes('健康') || query.includes('饮食') || query.includes('慢病')) {
-    return mockReplies[1]
+  if (query.includes('健康') || query.includes('饮食') || query.includes('慢病') || query.includes('血压') || query.includes('血糖')) {
+    return DEMO_WATERMARK + mockReplies[1]
   }
-  return mockReplies[2]
+  if (query.includes('护理') || query.includes('卧床') || query.includes('翻身') || query.includes('压疮')) {
+    return DEMO_WATERMARK + mockReplies[2]
+  }
+  return DEMO_WATERMARK + mockFallbackReply
 }
 
 // ========== Demo 动态消息存储 ==========

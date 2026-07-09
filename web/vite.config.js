@@ -16,9 +16,9 @@ export default defineConfig(({ mode }) => {
     },
     // Demo 模式部署到 GitHub Pages 的 /silver-guardian-v2/demo/ 路径下
     base: isDemo ? '/silver-guardian-v2/demo/' : '/',
-    // Demo 模式输出到 docs/demo-dist 目录
+    // Demo 模式输出到 docs/demo 目录（匹配 base 路径 /demo/）
     build: isDemo ? {
-      outDir: '../docs/demo-dist',
+      outDir: '../docs/demo',
       emptyOutDir: true
     } : undefined,
     server: {
